@@ -14,8 +14,20 @@ High-level use cases overview:
 
 5. After successfully transferred the money, receiver will receive a push notification.
 
+<br>
 
-<b>Web Services API</b>
+
+# Resful Web Services
+
+<b>Development Environment</b>
+- Jersey 2.22.2
+- Apache Tomcat 8.0.32
+- JDK 1.8.0.73
+- Maven 3.0.5
+- Eclipse IDE Mars.2
+<br>
+
+<b>API</b>
 <br>
 https://docs.google.com/document/d/1RyXXQ-zcGm4rnN19AYb6j3E4v6uj2yToCrBW6-jeSfY/edit?usp=sharing
-
+<br>
