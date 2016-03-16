@@ -25,9 +25,14 @@ High-level use cases overview:
 - JDK 1.8.0.73
 - Maven 3.0.5
 - Eclipse IDE Mars.2
+- Jackson JSON library 2.6.1
 <br>
 
 <b>API</b>
 <br>
 https://docs.google.com/document/d/1RyXXQ-zcGm4rnN19AYb6j3E4v6uj2yToCrBW6-jeSfY/edit?usp=sharing
 <br>
+
+References:
+https://jersey.java.net/
+https://www.ibm.com/developerworks/library/wa-jaxrs/
