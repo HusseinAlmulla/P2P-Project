@@ -43,23 +43,23 @@ public class UserDao {
 	}
 	
 	public boolean updateUser(User user) {
+        boolean isSuccess = true;
         Session session = DBUtil.getFactory().openSession();
         Transaction tx = null;
-        boolean success = false;
         try {
             tx = session.beginTransaction();
             session.update(user);
             tx.commit();
-            success = true;
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
+			isSuccess = false;
             e.printStackTrace();
         } finally {
         	session.disconnect();
         }
-        return success;
+        return isSuccess;
     }
 	
 	@SuppressWarnings("unchecked")
