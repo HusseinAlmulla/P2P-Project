@@ -1,4 +1,4 @@
-package edu.polyu.comp;
+package edu.polyu.comp.ws;
 
 import java.io.InputStream;
 
@@ -9,6 +9,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.polyu.comp.domain.User;
+import edu.polyu.comp.service.UserService;
+import edu.polyu.comp.util.StringUtil;
 
 @Path("getUser")
 public class P2pGetUser {
@@ -25,9 +29,8 @@ public class P2pGetUser {
 			ObjectMapper jackson = new ObjectMapper();
 			User user = jackson.readValue(output, User.class);
 			
-			// add JDBC call here to retrieve the user name from DBMS using the phone as primary key
-			String phone = user.getPhone();
-			String name = "jeffrey"; // return empty string if not found from DBMS
+			// add JDBC call here to retrieve the user name from DBMS using the phone as primary key	
+			String name = new UserService().findUserNameByPhoneNumber(user.getPhone());
 			
 			return Response.status(Response.Status.OK).entity("{\"name\":\"" + name + "\"}").build();
 			

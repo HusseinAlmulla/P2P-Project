@@ -1,4 +1,4 @@
-package edu.polyu.comp;
+package edu.polyu.comp.ws;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

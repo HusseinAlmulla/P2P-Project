@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 19, 2016 1:46:11 AM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+	<class name="edu.polyu.comp.domain.User" table="USER">
+		<id name="userOid" type="int">
+			<column name="USER_OID" />
+			<generator class="native" />
+		</id>
+		<property name="name" type="java.lang.String">
+			<column name="USER_NAME" />
+		</property>
+		<property name="email" type="java.lang.String">
+			<column name="EMAIL" />
+		</property>
+		<property name="phone" type="java.lang.String">
+			<column name="PHONE" />
+		</property>
+		<property name="bank" type="java.lang.String">
+			<column name="BANK_CODE" />
+		</property>
+		<property name="account" type="java.lang.String">
+			<column name="ACCOUNT_NUMBER" />
+		</property>
+		<property name="deviceToken" type="java.lang.String">
+			<column name="DEVICE_TOKEN" />
+		</property>
+	</class>
+</hibernate-mapping>

@@ -1,4 +1,4 @@
-package edu.polyu.comp;
+package edu.polyu.comp.ws;
 
 import java.io.InputStream;
 
@@ -10,8 +10,12 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Path("sendMoney")
-public class P2pSendMoney {
+import edu.polyu.comp.domain.User;
+import edu.polyu.comp.service.UserService;
+import edu.polyu.comp.util.StringUtil;
+
+@Path("createUser")
+public class P2pCreateUser {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -20,20 +24,22 @@ public class P2pSendMoney {
 
 		try {
 			output = StringUtil.convertInputStreamToString(requestBodyStream);
-			
+
 			// convert the incoming JSON message body into POJO
 			ObjectMapper jackson = new ObjectMapper();
-			Transaction tx = jackson.readValue(output, Transaction.class);
-			
-			// add JDBC call here to execute the tx in DBMS
-			boolean result = true; // the result from DBMS is executed successfully
-			
-			return Response.status(Response.Status.OK).entity("{\"result\":\"" + result + "\"}").build();
-			
+			User user = jackson.readValue(output, User.class);
+
+			// add JDBC call here to create user account in DBMS
+			boolean isSuccess = new UserService().createUser(user);
+			if (isSuccess) {
+				return Response.status(Response.Status.OK).entity(jackson.writeValueAsString(user)).build();
+			} else {
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+			}
 		} catch (Exception e) {
 			e.printStackTrace(); // log the error
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+
 }

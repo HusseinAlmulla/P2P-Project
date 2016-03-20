@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 19, 2016 2:08:29 AM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+	<class name="edu.polyu.comp.domain.Transaction" table="TRANSACTION_LOG">
+		<id name="transactionOid" type="int">
+			<column name="TRANSACTION_OID" />
+			<generator class="native" />
+		</id>
+		<property name="senderPhone" type="java.lang.String">
+			<column name="SENDER_PHONE" />
+		</property>
+		<property name="receiverPhone" type="java.lang.String">
+			<column name="RECEIVER_PHONE" />
+		</property>
+		<property name="currency" type="java.lang.String">
+			<column name="CURRENCY" />
+		</property>
+		<property name="amount" type="java.lang.Double">
+			<column name="AMOUNT" />
+		</property>
+		<property name="message" type="java.lang.String">
+			<column name="MESSAGE" />
+		</property>
+	</class>
+</hibernate-mapping>

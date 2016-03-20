@@ -1,4 +1,4 @@
-package edu.polyu.comp;
+package edu.polyu.comp.util;
 
 import java.io.InputStream;
 
@@ -19,5 +19,13 @@ public class StringUtil {
 
 		return buffer.toString();
 	}
+	
+	public static boolean isEmpty(String s) {
+        return (s == null || s.trim().equalsIgnoreCase(""));
+    }
+
+    public static String convertNull(String s) {
+        return s == null ? "" : s;
+    }
 
 }
