@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
+
+     <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp" />
+
+ 
+
+    <EditText
+        android:id="@+id/editTextRName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/register_page_user_name_placeholder"
+        >
+
+        <requestFocus />
+    </EditText>
+    
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp" />
+
+    <EditText
+        android:id="@+id/editTextREmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/register_page_email_placeholder"
+        android:inputType="textEmailAddress" >
+
+    </EditText>
+	<Space
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:minHeight="20dp" />
+	
+	   
+
+    <EditText
+        android:id="@+id/editTextRMobilePhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/register_page_phone_placeholder"
+        android:inputType="phone" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp" />
+    
+     <EditText
+	        android:id="@+id/editTextRBankAccount"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:ems="10"
+	        android:hint="@string/register_page_bank_account_placeholder"
+	        android:inputType="numberPassword" >
+	
+	       
+	</EditText>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp" />
+
+   
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:text="@string/register_page_register_button" />
+    
+    
+</LinearLayout>

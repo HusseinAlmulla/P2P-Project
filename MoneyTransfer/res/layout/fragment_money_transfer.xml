@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/money_transfer_page_amount"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editTextMoneyTransferAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/money_transfer_page_friend"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <Spinner
+    	android:id="@+id/spinnerFirendList"
+   		android:layout_width="match_parent"
+    	android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonMoneyTransfer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/money_transfer_page_submit_button" />
+
+</LinearLayout>

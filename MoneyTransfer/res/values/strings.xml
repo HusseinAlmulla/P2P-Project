@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MoneyTransfer</string>
+    <string name="action_settings">Settings</string>
+    
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="navigation_drawer_items_array">
+        <item>Profile</item>
+        <item>Contact List</item>
+        <item>Transfer Money</item>
+        <item>History</item>
+        <item>Sign Out</item>
+    </string-array>
+    
+    <string name="title_profile">Profile</string>
+    <string name="title_contact_list">Contact List</string>
+    <string name="title_transfer_money">Transfer Money</string>
+    <string name="title_history">History</string>
+    <string name="title_sign_out">Sign Out</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_main">Money Transfer</string>
+    <string name="title_activity_register">Register</string>
+    
+    <string name="login_page_login_button">Login</string>
+    <string name="login_page_email_placeholder">Email</string>
+    <string name="login_page_phone_placeholder">Mobile Phone</string>
+    <string name="login_page_register_button">Register</string>
+    
+    <string name="register_page_user_name_placeholder">User Name</string>
+    <string name="register_page_email_placeholder">Email</string>
+    <string name="register_page_phone_placeholder">Mobile Phone</string>
+    <string name="register_page_bank_account_placeholder">Bank Account No.</string>
+    <string name="register_page_register_button">Register</string>
+    
+    <string name="profile_page_user_name_placeholder">User Name</string>
+    <string name="profile_page_email_placeholder">Email</string>
+    <string name="profile_page_phone_placeholder">Mobile Phone</string>
+    <string name="profile_page_bank_account_placeholder">Bank Account No.</string>
+    <string name="profile_page_apply_button">Apply</string>
+    
+    <string name="contact_page_search">Search</string>
+    
+    <string name="money_transfer_page_amount">Amount</string>
+    <string name="money_transfer_page_friend">Friend</string>
+    <string name="money_transfer_page_submit_button">Submit</string>
+
+</resources>
