@@ -31,6 +31,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 		loginButton.setOnClickListener(this);
 		registerButton.setOnClickListener(this);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		((GlobalClass) this.getApplication()).setLoggedIn(false);
+			
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

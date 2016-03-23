@@ -3,6 +3,7 @@
 
     <string name="app_name">MoneyTransfer</string>
     <string name="action_settings">Settings</string>
+    <string name="package_name">hk.edu.polyu.moneytransfer</string>
     
     <!-- Nav Drawer Menu Items -->
     <string-array name="navigation_drawer_items_array">

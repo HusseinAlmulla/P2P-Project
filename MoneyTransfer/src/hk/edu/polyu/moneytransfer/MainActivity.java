@@ -1,9 +1,14 @@
 package hk.edu.polyu.moneytransfer;
 
+import java.io.IOException;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -29,7 +34,9 @@ public class MainActivity extends Activity {
 	// used to store app title
 	private CharSequence mTitle;
 	
-	
+	GoogleCloudMessaging gcm;
+    String regid;
+    String PROJECT_NUMBER = "630628729163";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +108,39 @@ public class MainActivity extends Activity {
 			selectItem(1);
 		}
 		
-
+		getRegId();
 		mDrawerLayout.openDrawer(Gravity.LEFT);
+		
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if(!((GlobalClass) this.getApplication()).isLoggedIn()){
+			Intent intent = new Intent(this, LoginActivity.class);
+        	intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        	
+			startActivity(intent);
+			
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		//TODO set timer
+		((GlobalClass) this.getApplication()).setLoggedIn(false);
+		
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		((GlobalClass) this.getApplication()).setLoggedIn(false);
+			
 	}
 
 	@Override
@@ -194,5 +232,33 @@ public class MainActivity extends Activity {
 		mTitle = title;
 		getActionBar().setTitle(mTitle);
 	}
+	
+	public void getRegId(){
+    	new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    regid = gcm.register(PROJECT_NUMBER);
+                    msg = "Device registered, registration ID=" + regid;
+                    Log.i("GetRegId",  msg);
+
+                   
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+            	// Log.i("REG_ID: ",  msg);
+            }
+        }.execute(null, null, null);
+    }
 
 }
