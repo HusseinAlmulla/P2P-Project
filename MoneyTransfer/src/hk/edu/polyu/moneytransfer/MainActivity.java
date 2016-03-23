@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	// declare properties
@@ -120,12 +121,9 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		if(!((GlobalClass) this.getApplication()).isLoggedIn()){
-			Intent intent = new Intent(this, LoginActivity.class);
-        	intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        	
-			startActivity(intent);
-			
+			startActivity(((GlobalClass) this.getApplication()).getLoginActivity());
 		}
+		
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		((GlobalClass) this.getApplication()).setLoggedIn(false);
-			
+		
 	}
 
 	@Override
@@ -150,13 +148,14 @@ public class MainActivity extends Activity {
     {
         new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_alert)
-        .setTitle("Closing Activity")
-        .setMessage("Are you sure you want to close")
+        .setTitle("Sign out")
+        .setMessage("Are you sure you want to sign out?")
         .setPositiveButton("Yes", new DialogInterface.OnClickListener()
         {
         	@Override
         	public void onClick(DialogInterface dialog, int which) {
-        		finish();    
+        		((GlobalClass) getApplication()).setLoggedIn(false);
+        		finish();
         	}
 
         })
@@ -223,11 +222,8 @@ public class MainActivity extends Activity {
 			break;
 		case 4:
 			((GlobalClass) this.getApplication()).setLoggedIn(false);
-					
-			Intent intent = new Intent(this, LoginActivity.class);
-        	intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        	
-			startActivity(intent);
+			finish();
+			
 			break;
 		default:
 			break;
