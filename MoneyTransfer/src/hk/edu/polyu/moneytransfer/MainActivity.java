@@ -5,8 +5,10 @@ import java.io.IOException;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -143,6 +145,26 @@ public class MainActivity extends Activity {
 			
 	}
 
+	@Override
+    public void onBackPressed()
+    {
+        new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Closing Activity")
+        .setMessage("Are you sure you want to close")
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+        {
+        	@Override
+        	public void onClick(DialogInterface dialog, int which) {
+        		finish();    
+        	}
+
+        })
+        .setNegativeButton("No", null)
+        .show();
+        
+    }
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
