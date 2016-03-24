@@ -26,6 +26,7 @@ High-level use cases overview:
 - Maven 3.0.5
 - Eclipse IDE Mars.2
 - Jackson JSON library 2.6.1
+- MySQL 5.6.21
 <br>
 
 <b>API</b>
