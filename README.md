@@ -42,10 +42,10 @@ https://www.ibm.com/developerworks/library/wa-jaxrs/<br>
 <br>
 
 <b>Useful commands</b><br>
-mysqladmin -u root -p version <b>-- show the version of database</b><br>
-mysqlshow -u root -p <b>-- show all the database</b><br>
-mysqlshow <i>db_name</i> -u root -p <b>-- show all the tables in the database</b><br>
-mysql -h host -u user -p < batch-file > mysql.out <b>-- execute batch of SQL commands and redirect the output to a file</b><br>
+mysqladmin -u <i>db_user_name</i> -p version <b>-- show the version of database</b><br>
+mysqlshow -u <i>db_user_name</i> -p <b>-- show all the database</b><br>
+mysqlshow <i>db_name</i> -u <i>db_user_name</i> -p <b>-- show all the tables in the database</b><br>
+mysql -h host -u <i>db_user_name</i> -p < batch-file > mysql.out <b>-- execute batch of SQL commands and redirect the output to a file</b><br>
 mysql -e "select * from <i>table_name</i>" <i>db_name</i> -u root -p <b>-- select all the records from a table of a given db</b><br>
 
 <b>References:</b><br>
@@ -57,6 +57,24 @@ https://docs.jboss.org/hibernate/search/3.2/reference/en/html/manual-index-chang
 
 # Amazon Free Web Hosting Service
 We use AWS (Amazon Web Service) Free Tier which is free available for 12 months, 750 hours per month of Linux virtual server (EC2 instance). Our web apps is structured into 2 tiers, the first tier is an application server, which is responsible for the web service functionality. The second tier is a database server, which is responsible for data storage, while the mobile app is for presenting the user interface and providing limited offline functionality.
+
+<b>AWS SSH command</b>
+- ssh -i "comp5527.pem" ec2-user@ec2-52-10-73-179.us-west-2.compute.amazonaws.com<br>
+- port 22<br>
+
+<b>AWS SSH file transfer</b>
+- scp -i "comp5527.pem" <i>local_file_path</i> ec2-user@ec2-52-10-73-179.us-west-2.compute.amazonaws.com:<i>remote_file_path</i><br>
+
+<b>AWS Management Console</b><br>
+- https://polyu-comp5527.signin.aws.amazon.com/console<br>
+
+<b>Amazon Linux AMI Test Page</b> 
+- http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com<br>
+- port 80<br>
+
+<br>Amazon RDS DB instance</b>
+- mydbinstance.cenmpokbqyfp.us-west-2.rds.amazonaws.com<br>
+- port 3366<br>
 
 <b>References:</b><br>
 https://aws.amazon.com/free/<br>
