@@ -76,7 +76,7 @@ We use AWS (Amazon Web Service) Free Tier which is free available for 12 months,
 - http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com
 - port 8080<br>
 
-<br>Amazon RDS DB instance</b>
+<b>Amazon RDS DB instance</b>
 - mydbinstance.cenmpokbqyfp.us-west-2.rds.amazonaws.com<br>
 - port 3366<br>
 
