@@ -26,7 +26,7 @@ High-level use cases overview:
 - Maven 3.0.5
 - Eclipse IDE Mars.2
 - Jackson JSON library 2.6.1
-- MySQL 5.6.21 or 5.7.11 (root@localhost: u3CXCF?JBkWS)
+- MySQL 5.6.21 or 5.7.11 (root@localhost: 123456 / u3CXCF?JBkWS)
 <br>
 
 <b>API</b>
