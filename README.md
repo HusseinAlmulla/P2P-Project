@@ -46,7 +46,7 @@ mysqladmin -u <i>db_user_name</i> -p version <b>-- show the version of database<
 mysqlshow -u <i>db_user_name</i> -p <b>-- show all the database</b><br>
 mysqlshow <i>db_name</i> -u <i>db_user_name</i> -p <b>-- show all the tables in the database</b><br>
 mysql -h host -u <i>db_user_name</i> -p < batch-file > mysql.out <b>-- execute batch of SQL commands and redirect the output to a file</b><br>
-mysql -e "select * from <i>table_name</i>" <i>db_name</i> -u root -p <b>-- select all the records from a table of a given db</b><br>
+mysql -e "select * from <i>table_name</i>" <i>db_name</i> -u <i>db_user_name</i> -p <b>-- select all the records from a table of a given db</b><br>
 
 <b>References:</b><br>
 https://dev.mysql.com/downloads/mysql/<br>
@@ -71,6 +71,10 @@ We use AWS (Amazon Web Service) Free Tier which is free available for 12 months,
 <b>Amazon Linux AMI Test Page</b> 
 - http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com<br>
 - port 80<br>
+
+<b>Tomcat Page</b>
+- http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com
+- port 8080<br>
 
 <br>Amazon RDS DB instance</b>
 - mydbinstance.cenmpokbqyfp.us-west-2.rds.amazonaws.com<br>
