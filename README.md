@@ -40,3 +40,13 @@ https://www.ibm.com/developerworks/library/wa-jaxrs/<br>
 https://dev.mysql.com/downloads/mysql/<br>
 https://dev.mysql.com/doc/refman/en/<br>
 
+# Useful commands
+
+<b>MySQL</b><br>
+mysqladmin -u root -p version <b>-- show the version of database</b><br>
+mysqlshow -u root -p <b>-- show all the database</b><br>
+mysqlshow <i>db_name</i> -u root -p <b>-- show all the tables in the database</b><br>
+mysql -h host -u user -p < batch-file > mysql.out <b>-- execute batch of SQL commands and redirect the output to a file</b><br>
+mysql -e "select * from <i>table_name</i>" <i>db_name</i> -u root -p <b>-- select all the records from a table of a given db</b><br>
+
+
