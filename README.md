@@ -33,7 +33,7 @@ https://www.ibm.com/developerworks/library/wa-jaxrs/<br>
 # MySQL Database Server
 
 <b>Development Environment</b>
-- MySQL Server Community Edition 5.6.21 or 5.7.11 (root@localhost: 123456 / u3CXCF?JBkWS)
+- MySQL Server Community Edition 5.6.21 or 5.7.11 (root@localhost: 123456)
 - hibernate-search-orm 4.5.1
 - hibernate-core 4.3.1
 - hibernate-manager 4.3.1
