@@ -39,6 +39,9 @@ https://jersey.java.net/<br>
 https://www.ibm.com/developerworks/library/wa-jaxrs/<br>
 https://dev.mysql.com/downloads/mysql/<br>
 https://dev.mysql.com/doc/refman/en/<br>
+https://docs.jboss.org/hibernate/search/4.2/reference/en-US/html/search-configuration.html#search-configuration-event<br>
+https://docs.jboss.org/hibernate/search/3.3/reference/en-US/html/search-query.html<br>
+https://docs.jboss.org/hibernate/search/3.2/reference/en/html/manual-index-changes.html<br>
 
 # Useful commands
 
