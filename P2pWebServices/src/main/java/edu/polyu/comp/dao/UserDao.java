@@ -68,8 +68,8 @@ public class UserDao {
 		if (!StringUtil.isEmpty(phoneNumber)) {
 			Session session = DBUtil.getFactory().openSession();
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
-			try {				
-				fullTextSession.createIndexer();				
+			try {	
+				fullTextSession.createIndexer().startAndWait();		
 				StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
 				BooleanQuery finalQuery = new BooleanQuery();
 				QueryParser queryParser = new QueryParser(Version.LUCENE_35, UserConstants.DOMAIN_NAME_PHONE, analyzer);

@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Mar 19, 2016 1:46:11 AM by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
-	<class name="edu.polyu.comp.domain.User" table="USER">
+	<class name="edu.polyu.comp.domain.User" table="user">
 		<id name="userOid" type="int">
 			<column name="USER_OID" />
 			<generator class="native" />

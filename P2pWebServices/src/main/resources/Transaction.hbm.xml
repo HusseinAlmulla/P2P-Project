@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Mar 19, 2016 2:08:29 AM by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
-	<class name="edu.polyu.comp.domain.Transaction" table="TRANSACTION_LOG">
+	<class name="edu.polyu.comp.domain.Transaction" table="transaction_log">
 		<id name="transactionOid" type="int">
 			<column name="TRANSACTION_OID" />
 			<generator class="native" />

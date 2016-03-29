@@ -10,7 +10,8 @@ public class Test {
 	public static void main(String[] args) {
 		//testCreateUser();
 		//testfindUserNameByPhoneNumber();	
-		testCreateTransaction();
+		testfindUserNameByPhoneNumber();
+		System.exit(0);
 	}
 	
 	private static void testCreateUser() {
