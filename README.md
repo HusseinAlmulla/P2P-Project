@@ -35,5 +35,8 @@ https://docs.google.com/document/d/1RyXXQ-zcGm4rnN19AYb6j3E4v6uj2yToCrBW6-jeSfY/
 <br>
 
 References:
-https://jersey.java.net/
-https://www.ibm.com/developerworks/library/wa-jaxrs/
+https://jersey.java.net/<br>
+https://www.ibm.com/developerworks/library/wa-jaxrs/<br>
+https://dev.mysql.com/downloads/mysql/<br>
+https://dev.mysql.com/doc/refman/en/<br>
+
