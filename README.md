@@ -34,7 +34,7 @@ High-level use cases overview:
 https://docs.google.com/document/d/1RyXXQ-zcGm4rnN19AYb6j3E4v6uj2yToCrBW6-jeSfY/edit?usp=sharing
 <br>
 
-References:
+<b>References:</b><br>
 https://jersey.java.net/<br>
 https://www.ibm.com/developerworks/library/wa-jaxrs/<br>
 https://dev.mysql.com/downloads/mysql/<br>
