@@ -76,21 +76,41 @@ public class RegisterActivity extends Activity implements OnClickListener, Async
 	        	String bank_code = "HSBC"; //default to HSBC
 	        	Log.d(TAG, bank_code);
 	        	
-	        	progress = ProgressDialog.show(this, "Connecting", "Please wait...", true);
-	        	
-	        	//trigger network request
-	        	new ConnectWebServiceTask(this).execute(
-	        			getString(R.string.webservice_protocol),
-	        			getString(R.string.webservice_url),
-	        			getString(R.string.webservice_port),
-	        			//"/P2pWebServices/rest/hello"
-	        			"P2pWebServices/rest/createUser", 
-	        			userName,
-	        			email,
-	        			phone,
-	        			bank_code,
-	        			account,
-	        			GCMRegistrationService.DEVICE_TOKEN);
+	        	// check if any of the field is empty or null
+	        	if (null==userName || "".equals(userName.trim()) || 
+	        		null==emailField || "".equals(email.trim()) || 
+	        		null==phoneField || "".equals(phone.trim()) || 
+	        		null==accountField || "".equals(account.trim()) || 
+	        		null==GCMRegistrationService.DEVICE_TOKEN
+	        	) {
+	        		// show error if any of the field is absent
+	                new AlertDialog.Builder(this)
+					.setTitle("Error").setMessage("Please input all the information!").setCancelable(true)
+					.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					}).create().show();
+	                
+	        	} else {
+	        		// all the fields are ready, we are good to go
+		        	progress = ProgressDialog.show(this, "Connecting", "Please wait...", true);
+		        	
+		        	//trigger network request
+		        	new ConnectWebServiceTask(this).execute(
+		        			getString(R.string.webservice_protocol),
+		        			getString(R.string.webservice_url),
+		        			getString(R.string.webservice_port),
+		        			//"/P2pWebServices/rest/hello"
+		        			"P2pWebServices/rest/createUser", 
+		        			userName,
+		        			email,
+		        			phone,
+		        			bank_code,
+		        			account,
+		        			GCMRegistrationService.DEVICE_TOKEN);
+	        	}
 	        	
 	            break;
 		}
