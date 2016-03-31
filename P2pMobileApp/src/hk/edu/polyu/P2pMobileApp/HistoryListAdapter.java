@@ -1,4 +1,4 @@
-package hk.edu.polyu.moneytransfer;
+package hk.edu.polyu.P2pMobileApp;
 
 import android.content.Context;
 import android.view.LayoutInflater;

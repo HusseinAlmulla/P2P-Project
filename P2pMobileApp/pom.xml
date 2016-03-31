@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>hk.edu.polyu.moneytransfer</groupId>
+	<artifactId>P2pMobileApp</artifactId>
+	<version>0.1</version>
+	<packaging>apk</packaging>
+	<properties>
+		<source.level>1.5</source.level>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<version>4.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>support-v4</artifactId>
+			<version>r23</version>
+		</dependency> 
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-gcm</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-ads</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-analytics</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-appindexing</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-base</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-basement</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.android.gms</groupId>
+			<artifactId>play-services-measurement</artifactId>
+			<version>8.1.0</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		
+		<resources>
+			<resource>
+				<directory>${project.basedir}/res</directory>
+				<targetPath>${project.build.directory}/filtered-res</targetPath>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/res</directory>
+				<filtering>false</filtering>
+				<targetPath>${project.build.directory}/filtered-res</targetPath>
+				<excludes>
+					<exclude>**/*.xml</exclude>
+				</excludes>
+			</resource>
+			<!-- filter manifest and put filtered file in target/filtered-manifest/ -->
+			<resource>
+			  <directory>${project.basedir}</directory>
+			  <filtering>true</filtering>
+			  <targetPath>${project.build.directory}/filtered-manifest</targetPath>
+			  <includes>
+				<include>AndroidManifest.xml</include>
+			  </includes>
+			</resource>	
+		</resources>		
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>signing</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<phase>package</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<archiveDirectory></archiveDirectory>
+							<includes>
+								<include>target/*.apk</include>
+							</includes>
+							<keystore>/Users/jeffrey/.android/debug.keystore</keystore>
+							<storepass>android</storepass>
+							<keypass>androiddebugkey</keypass>
+							<alias>android</alias>
+							<skip>true</skip>
+							<arguments>
+								<argument>-sigalg</argument>
+								<argument>MD5withRSA</argument>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<resourceDirectory>${project.build.directory}/filtered-res</resourceDirectory>
+					<renameManifestPackage>hk.edu.polyu.P2pMobileApp</renameManifestPackage>
+					<sdk>
+						<platform>19</platform>
+						<path>/Users/jeffrey/Library/Android/sdk</path>
+					</sdk>
+					<sign>
+						<debug>true</debug>
+					</sign>
+					<deleteConflictingFiles>true</deleteConflictingFiles>
+					<!-- tell build process to use filtered manifest -->
+					<androidManifestFile>${project.build.directory}/filtered-manifest/AndroidManifest.xml</androidManifestFile>
+					<!-- Proguard 
+					 | Since version 3.0.0 the android maven plugin has built in support for proguard. 
+					 | It supports using the proguard.cfg file and you can activate it easily 
+					 | as shown below.
+					 |
+					 | More documentation is in the plugin help available with:
+					 | mvn android:help -Dgoal=proguard -Ddetail=true
+					-->
+					<proguard>
+					    <skip>false</skip>
+					    <config>'${basedir}/proguard.cfg'</config>
+					    <configs>
+					        <config>'/Users/jeffrey/Library/Android/sdk/tools/proguard/proguard-android.txt'</config>
+					    </configs>      
+					    <includeJdkLibs>false</includeJdkLibs>     
+					</proguard>
+				</configuration>
+				<extensions>true</extensions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${source.level}</source>
+					<target>${source.level}</target>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+	</build>
+	
+</project>

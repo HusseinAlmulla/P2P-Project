@@ -1,16 +1,10 @@
-package hk.edu.polyu.moneytransfer;
-
-import java.io.IOException;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+package hk.edu.polyu.P2pMobileApp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -21,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	// declare properties
@@ -36,10 +29,6 @@ public class MainActivity extends Activity {
 
 	// used to store app title
 	private CharSequence mTitle;
-	
-	GoogleCloudMessaging gcm;
-    String regid;
-    String PROJECT_NUMBER = "630628729163";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +100,7 @@ public class MainActivity extends Activity {
 			selectItem(1);
 		}
 		
-		getRegId();
 		mDrawerLayout.openDrawer(Gravity.LEFT);
-		
 	}
 
 	@Override
@@ -250,33 +237,4 @@ public class MainActivity extends Activity {
 		mTitle = title;
 		getActionBar().setTitle(mTitle);
 	}
-	
-	public void getRegId(){
-    	new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID=" + regid;
-                    Log.i("GetRegId",  msg);
-
-                   
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-                    
-                }
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-            	// Log.i("REG_ID: ",  msg);
-            }
-        }.execute(null, null, null);
-    }
-
 }

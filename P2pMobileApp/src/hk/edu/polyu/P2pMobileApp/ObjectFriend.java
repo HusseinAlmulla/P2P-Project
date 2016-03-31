@@ -1,4 +1,4 @@
-package hk.edu.polyu.moneytransfer;
+package hk.edu.polyu.P2pMobileApp;
 
 public class ObjectFriend {
 	private String userName;

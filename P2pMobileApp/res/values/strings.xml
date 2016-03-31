@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MoneyTransfer</string>
+    <string name="app_name">P2P Money Transfer</string>
     <string name="action_settings">Settings</string>
     <string name="package_name">hk.edu.polyu.moneytransfer</string>
     
@@ -49,4 +49,10 @@
     <string name="money_transfer_page_friend">Friend</string>
     <string name="money_transfer_page_submit_button">Submit</string>
 
+    <string name="gcm_defaultSenderId">578005844236</string> <!-- Jeffrey sender ID -->
+    
+    <string name="webservice_protocol">http</string>
+    <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string>
+    <string name="webservice_port">8080</string>
+    
 </resources>
