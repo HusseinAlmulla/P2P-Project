@@ -7,6 +7,7 @@ import edu.polyu.comp.util.StringUtil;
 public class UserService {
 	
 	private UserDao userDao;
+	
 	public UserDao getUserDao() {
 		if (userDao == null) {
 			userDao = new UserDao();
@@ -14,7 +15,6 @@ public class UserService {
 		return userDao;
 	}
 	
-
 	public boolean createUser(User user) {
 		return getUserDao().createUser(user);
 	}

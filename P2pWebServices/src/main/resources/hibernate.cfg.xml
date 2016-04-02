@@ -4,13 +4,18 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.password">comp5527</property>
 		
 		<!-- change to use Amazon AWS and RDS -->
-		<!-- <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/comp5527</property> -->
+		<!-- 
 		<property name="hibernate.connection.url">jdbc:mysql://mydbinstance.cenmpokbqyfp.us-west-2.rds.amazonaws.com:3306/comp5527</property>
-		
 		<property name="hibernate.connection.username">comp5527</property>
+		<property name="hibernate.connection.password">comp5527</property>
+		-->
+		
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/comp5527</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">123456</property>
+		
 		<property name="hibernate.default_schema">comp5527</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		

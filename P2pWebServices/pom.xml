@@ -75,8 +75,7 @@
 			<artifactId>gcm-server</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-
-
+		
 	</dependencies>
 	<build>
 		<finalName>P2pWebServices</finalName>
