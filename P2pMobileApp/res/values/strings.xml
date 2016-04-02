@@ -26,6 +26,7 @@
     <string name="title_activity_main">Money Transfer</string>
     <string name="title_activity_register">Register</string>
     
+    <string name="login_page_user_name_placeholder">User Name</string>
     <string name="login_page_login_button">Login</string>
     <string name="login_page_email_placeholder">Email</string>
     <string name="login_page_phone_placeholder">Mobile Phone</string>
@@ -49,10 +50,15 @@
     <string name="money_transfer_page_friend">Friend</string>
     <string name="money_transfer_page_submit_button">Submit</string>
 
+    <string name="p2p_address_book">P2pContacts</string>
+    
     <string name="gcm_defaultSenderId">578005844236</string> <!-- Jeffrey sender ID -->
     
     <string name="webservice_protocol">http</string>
-    <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string>
+    <!-- <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string> -->
+    <string name="webservice_url">192.168.0.103</string>
     <string name="webservice_port">8080</string>
-    
+    <string name="webservice_test">P2pWebServices/rest/hello</string>
+    <string name="webservice_create_user">P2pWebServices/rest/createUser</string>
+    <string name="webservice_get_user">P2pWebServices/rest/getUser</string>
 </resources>

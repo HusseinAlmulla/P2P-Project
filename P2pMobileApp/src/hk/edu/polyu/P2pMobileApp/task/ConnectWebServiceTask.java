@@ -8,16 +8,22 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import hk.edu.polyu.P2pMobileApp.gcm.GCMRegistrationService;
+import hk.edu.polyu.P2pMobileApp.R;
+import hk.edu.polyu.P2pMobileApp.json.User;
 
 public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 	private static final String TAG = "ConnectWebServiceTask";
 	
+	private Context mContext;
 	private AsyncTaskCallback mCallback;
 	
-	public ConnectWebServiceTask(AsyncTaskCallback callback) {
+	public ConnectWebServiceTask(Context context, AsyncTaskCallback callback) {
+		mContext = context;
 		mCallback = callback;
 	}
 	
@@ -29,54 +35,65 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 	
 	@Override
 	protected Boolean doInBackground(String... params) {
-		Boolean result = Boolean.valueOf(false);
-		
 		String protocol = params [0];
-		Log.d(TAG, "protocol: " + protocol);
-		
+		//Log.d(TAG, "protocol: " + protocol);
 		String url = params[1];
-		Log.d(TAG, "url: " + url);
-		
+		//Log.d(TAG, "url: " + url);
 		int port = Integer.parseInt(params[2]);
-		Log.d(TAG, "port: " + port);
-		
+		//Log.d(TAG, "port: " + port);
 		String service = params [3];
-		Log.d(TAG, "service: " + service);
+		//Log.d(TAG, "service: " + service);
 		
+		if (service.equals(mContext.getString(R.string.webservice_create_user))) {
+			return createUserRequest(params);
+		} else if (service.equals(mContext.getString(R.string.webservice_get_user))) {
+			return getUserRequest(params);
+		} else {
+			return dummyRequest(params);
+		}
+	}
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+    	Log.d(TAG, "exeution result: " + result);
+    	mCallback.callback(result);
+    }
+	
+    protected Boolean createUserRequest(String... params) {
+    	Boolean result = Boolean.valueOf(false);
+    	
+    	String protocol = params [0];
+    	String url = params[1];
+    	int port = Integer.parseInt(params[2]);
+    	String service = params [3];
+    	
 		try {
 			URL mUrl = new URL(protocol, url, port, service);
+			Log.d(TAG, "connecting to: " + mUrl.toString());
 	        HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
 	        conn.setReadTimeout(10000 /* milliseconds */);
 	        conn.setConnectTimeout(10000 /* milliseconds */);
 			conn.setUseCaches(false); 
 			conn.setRequestProperty("Content-Type","application/json");
 			
-		    if (service.equals("P2pWebServices/rest/createUser")) {
-		    	// output data to server
-		    	conn.setRequestMethod("POST");
-		    	conn.setDoOutput(true);
-		    	conn.setDoInput(true);
-		    	
-		    	JSONObject jsonData = new JSONObject();
-		    	jsonData.put("name", params[4]);
-		    	jsonData.put("email", params[5]);
-		    	jsonData.put("phone", params[6]);
-		    	jsonData.put("bank", params[7]);
-		    	jsonData.put("account", params[8]);
-		    	jsonData.put("deviceToken", params[9]);
-		    	Log.d(TAG, "json data: " + jsonData);
-		    	
-		    	OutputStreamWriter outputStream = new OutputStreamWriter(conn.getOutputStream());
-		    	outputStream.write(jsonData.toString());
-		    	outputStream.flush();
-		    	
-		    } else {
-		    	// simply request from server
-		    	conn.setRequestMethod("GET");
-		    	conn.setDoInput(true);
-		    	conn.connect();
-		    }
-		    
+	    	// output data to server
+	    	conn.setRequestMethod("POST");
+	    	conn.setDoOutput(true);
+	    	conn.setDoInput(true);
+	    	
+	    	JSONObject jsonData = new JSONObject();
+	    	jsonData.put("name", params[4]);
+	    	jsonData.put("email", params[5]);
+	    	jsonData.put("phone", params[6]);
+	    	jsonData.put("bank", params[7]);
+	    	jsonData.put("account", params[8]);
+	    	jsonData.put("deviceToken", params[9]);
+	    	Log.d(TAG, "json data: " + jsonData);
+	    	
+	    	OutputStreamWriter outputStream = new OutputStreamWriter(conn.getOutputStream());
+	    	outputStream.write(jsonData.toString());
+	    	outputStream.flush();
+			
 		    int responseCode = conn.getResponseCode();
 		    Log.d(TAG, "The response code is: " + responseCode);
 		    
@@ -100,12 +117,109 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		}
 		
 		return result;
-	}
-
-    @Override
-    protected void onPostExecute(Boolean result) {
-    	Log.d(TAG, "exeution result: " + result);
-    	mCallback.callback(result);
     }
-	
+    
+    protected Boolean getUserRequest(String...params) {
+    	Boolean result = Boolean.valueOf(false);
+    	
+    	String protocol = params [0];
+    	String url = params[1];
+    	int port = Integer.parseInt(params[2]);
+    	String service = params [3];
+    	
+    	String phone = params[4];
+    	String name = params[5];
+    	
+		try {
+			URL mUrl = new URL(protocol, url, port, service + "/" + phone);
+			Log.d(TAG, "connecting to: " + mUrl.toString());
+	        HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
+	        conn.setReadTimeout(10000 /* milliseconds */);
+	        conn.setConnectTimeout(10000 /* milliseconds */);
+			conn.setUseCaches(false);
+			
+			// simply request from server
+	    	conn.setRequestMethod("GET");
+	    	conn.setDoInput(true);
+	    	conn.connect();
+	    	
+		    int responseCode = conn.getResponseCode();
+		    Log.d(TAG, "The response code is: " + responseCode);
+		    
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+				StringBuilder sb = new StringBuilder();
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				br.close();
+				Log.d(TAG, "server response: " + sb.toString());
+				
+				// convert the incoming JSON message body into POJO
+				ObjectMapper jackson = new ObjectMapper();
+				User user = jackson.readValue(sb.toString(), User.class);
+				// compare server returned name and user input name
+				if (user.getName().equals(name)) {
+					result = true;
+				}
+				
+			} else {
+				Log.d(TAG, "error response: " + conn.getResponseMessage());
+			}
+		    
+		} catch (Exception exc) {
+			Log.e(TAG, exc.getMessage(), exc);
+		}
+		
+		return result;
+    }
+    
+    protected Boolean dummyRequest(String...params) {
+    	Boolean result = Boolean.valueOf(false);
+    	
+    	String protocol = params [0];
+    	String url = params[1];
+    	int port = Integer.parseInt(params[2]);
+    	String service = params [3];
+    	
+		try {
+			URL mUrl = new URL(protocol, url, port, service);
+			Log.d(TAG, "connecting to: " + mUrl.toString());
+	        HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
+	        conn.setReadTimeout(10000 /* milliseconds */);
+	        conn.setConnectTimeout(10000 /* milliseconds */);
+			conn.setUseCaches(false); 
+			conn.setRequestProperty("Content-Type","application/json");
+			
+	    	// simply request from server
+	    	conn.setRequestMethod("GET");
+	    	conn.setDoInput(true);
+	    	conn.connect();
+	    	
+		    int responseCode = conn.getResponseCode();
+		    Log.d(TAG, "The response code is: " + responseCode);
+		    
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+				StringBuilder sb = new StringBuilder();
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				br.close();
+				Log.d(TAG, "server response: " + sb.toString());
+				result = true;
+				
+			} else {
+				Log.d(TAG, "error response: " + conn.getResponseMessage());
+			}
+		    
+		} catch (Exception exc) {
+			Log.e(TAG, exc.getMessage(), exc);
+		}
+		
+		return result;
+    }
+    
 }

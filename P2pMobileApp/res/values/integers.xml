@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Google Play Service Version -->
+    <integer name="google_play_services_version">8115000</integer>
+    
+</resources>
