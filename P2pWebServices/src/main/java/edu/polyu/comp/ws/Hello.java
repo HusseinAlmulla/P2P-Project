@@ -7,6 +7,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.hibernate.Session;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+
+import edu.polyu.comp.util.DBUtil;
+import edu.polyu.comp.util.LoggerUtil;
+
 //Plain old Java Object it does not extend as class or implements 
 //an interface
 
@@ -26,6 +33,9 @@ public class Hello {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response sayHelloWorld() {
 		String output = "Hello World!";
+		
+
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -35,8 +45,20 @@ public class Hello {
 	@Path("/{name}")
 	@Produces(MediaType.TEXT_HTML)
 	public Response sayHtmlHello(@PathParam("name") String name) {
-		String output = "<html> " + "<title>" + "Hello " + name + "</title>" + "<body><h1>" + "Hello " + name
+		String output = "<html> " + "<title>" + "Hello " + name + "</title>" + "<body><h1>" + "Hello " + name + 
+				"<br>Database Index will now be rebuilt..." + 
+				"<br>Please make sure the system is put into maintenance or else or the query will return nothing."
 				+ "</body></h1>" + "</html> ";
+		
+		Session session = DBUtil.getFactory().openSession();
+		FullTextSession fullTextSession = Search.getFullTextSession(session);
+		try {
+			System.out.println("@@ database re-indexing now begin...");
+			fullTextSession.createIndexer().startAndWait();
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	

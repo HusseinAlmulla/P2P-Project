@@ -47,9 +47,12 @@ public class TransactionService {
 	public boolean sendPushNotification(Transaction transaction) {
 		String notificationToken = getUserService().findDeviceTokenByPhoneNumber(transaction.getReceiverPhone());
 		Sender sender = new Sender(TransactionConstants.GCM_API_KEY);
-		String notificationMsg = this.getPushNotificationMessage(transaction);
-		Message msg = new Message.Builder().addData(TransactionConstants.DATA_KEY_MSG, notificationMsg).build();
-
+		Message.Builder builder = new Message.Builder();
+		builder.addData(TransactionConstants.DATA_KEY_TO, getRecipientDeviceToken(transaction));
+		builder.addData(TransactionConstants.DATA_KEY_MSG, getPushNotificationMessage(transaction));
+		Message msg = builder.build();
+		LoggerUtil.info(this.getClass().getName(), "@@ GCM message: " + msg.toString());
+		
 		try {
 			Result result = sender.send(msg, notificationToken, TransactionConstants.GCM_MAX_RETRIVES);
 			if (StringUtil.isEmpty(result.getErrorCodeName())) {
@@ -68,10 +71,18 @@ public class TransactionService {
 	}
 	
 	public String getPushNotificationMessage(Transaction transaction){
-		String sender = getUserService().findDeviceTokenByPhoneNumber(transaction.getSenderPhone());
-		sender = sender.split(sender)[0];
-		String receiver = getUserService().findDeviceTokenByPhoneNumber(transaction.getReceiverPhone());
-		receiver = receiver.split(receiver)[0];		
+		String sender = getUserService().findUserNameByPhoneNumber(transaction.getSenderPhone());
+		LoggerUtil.info(this.getClass().getName(), "@@ sender name: " + sender);
+		//sender = sender.split(sender)[0];
+		String receiver = getUserService().findUserNameByPhoneNumber(transaction.getReceiverPhone());
+		LoggerUtil.info(this.getClass().getName(), "@@ recipient name: " + receiver);
+		//receiver = receiver.split(receiver)[0];	
 		return "Hey " + receiver + ", you just receive a P2P transfer from " + sender + "! " + sender + " said: " + transaction.getMessage();		
+	}
+	
+	public String getRecipientDeviceToken(Transaction transaction) {
+		String deviceToken = getUserService().findDeviceTokenByPhoneNumber(transaction.getReceiverPhone());
+		LoggerUtil.info(this.getClass().getName(), "@@ recipient device token: " + deviceToken);
+		return deviceToken;
 	}
 }

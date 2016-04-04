@@ -30,6 +30,7 @@ public class UserDao {
 			tx = session.beginTransaction();
 			session.save(user);
 			tx.commit();
+			
 		} catch (HibernateException e) {
 			if (tx != null) {
 				tx.rollback();
@@ -69,7 +70,9 @@ public class UserDao {
 			Session session = DBUtil.getFactory().openSession();
 			FullTextSession fullTextSession = Search.getFullTextSession(session);
 			try {	
-				fullTextSession.createIndexer().startAndWait();		
+				// not necessary if database index is presence already
+				//fullTextSession.createIndexer().startAndWait(); 
+				
 				StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
 				BooleanQuery finalQuery = new BooleanQuery();
 				QueryParser queryParser = new QueryParser(Version.LUCENE_35, UserConstants.DOMAIN_NAME_PHONE, analyzer);
