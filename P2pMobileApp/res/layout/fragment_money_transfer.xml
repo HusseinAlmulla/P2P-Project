@@ -4,9 +4,23 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:orientation="vertical"
+    android:paddingTop="20dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp" >
-
+    
+    <TextView
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="@string/money_transfer_page_currency"
+    	android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <Spinner
+		android:id="@+id/spinnerCurrencyList"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<requestFocus />
+	</Spinner>
+    
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,22 +32,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal" >
-
-        <requestFocus />
-    </EditText>
-
+        android:inputType="numberDecimal" />
+    
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/money_transfer_page_friend"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+        
     <Spinner
     	android:id="@+id/spinnerFirendList"
    		android:layout_width="match_parent"
     	android:layout_height="wrap_content" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/money_transfer_page_message"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editTextMoneyTransferMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/money_transfer_page_message_placeholder">
+    </EditText>
+    
     <Button
         android:id="@+id/buttonMoneyTransfer"
         android:layout_width="match_parent"

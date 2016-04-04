@@ -45,13 +45,18 @@ public class MainActivity extends Activity {
 
 		
 		// list the drawer items
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[5];
-
-		drawerItem[0] = new ObjectDrawerItem(getResources().getString(R.string.title_profile));
-		drawerItem[1] = new ObjectDrawerItem(getResources().getString(R.string.title_contact_list));
-		drawerItem[2] = new ObjectDrawerItem(getResources().getString(R.string.title_transfer_money));
-		drawerItem[3] = new ObjectDrawerItem(getResources().getString(R.string.title_history));
-		drawerItem[4] = new ObjectDrawerItem(getResources().getString(R.string.title_sign_out));
+//		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[5];
+//		drawerItem[0] = new ObjectDrawerItem(getResources().getString(R.string.title_profile));
+//		drawerItem[1] = new ObjectDrawerItem(getResources().getString(R.string.title_contact_list));
+//		drawerItem[2] = new ObjectDrawerItem(getResources().getString(R.string.title_transfer_money));
+//		drawerItem[3] = new ObjectDrawerItem(getResources().getString(R.string.title_history));
+//		drawerItem[4] = new ObjectDrawerItem(getResources().getString(R.string.title_sign_out));
+		
+		// only support contact list and transfer money feature
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
+		drawerItem[0] = new ObjectDrawerItem(getResources().getString(R.string.title_contact_list));
+		drawerItem[1] = new ObjectDrawerItem(getResources().getString(R.string.title_transfer_money));
+		drawerItem[2] = new ObjectDrawerItem(getResources().getString(R.string.title_sign_out));
 		
 		// Pass the folderData to our ListView adapter
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.listview_item_row, drawerItem);
@@ -148,7 +153,6 @@ public class MainActivity extends Activity {
         })
         .setNegativeButton("No", null)
         .show();
-        
     }
 	
 	@Override
@@ -160,7 +164,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		// The action bar home/up action should open or close the drawer.
 		// ActionBarDrawerToggle will take care of this.
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -180,7 +183,6 @@ public class MainActivity extends Activity {
 
 	// navigation drawer click listener
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			selectItem(position);
@@ -189,29 +191,41 @@ public class MainActivity extends Activity {
 	}
 
 	private void selectItem(int position) {
-
 		// update the main content by replacing fragments
 
 		Fragment fragment = null;
 
 		switch (position) {
+//		case 0:
+//			fragment = new ProfileFragment(this);
+//			break;
 		case 0:
-			fragment = new ProfileFragment(this);
-			break;
-		case 1:
 			fragment = new ContactFragment(this);
 			break;
-		case 2:
+		case 1:
 			fragment = new MoneyTransferFragment(this);
 			break;
-		case 3:
-			fragment = new HistoryFragment(this);
+//		case 3:
+//			fragment = new HistoryFragment(this);
+//			break;
+		case 2:
+	        new AlertDialog.Builder(this)
+	        .setIcon(android.R.drawable.ic_dialog_alert)
+	        .setTitle("Sign out")
+	        .setMessage("Are you sure you want to sign out?")
+	        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+	        {
+	        	@Override
+	        	public void onClick(DialogInterface dialog, int which) {
+	        		((GlobalClass) getApplication()).setLoggedIn(false);
+	        		finish();
+	        	}
+
+	        })
+	        .setNegativeButton("No", null)
+	        .show();
 			break;
-		case 4:
-			((GlobalClass) this.getApplication()).setLoggedIn(false);
-			finish();
 			
-			break;
 		default:
 			break;
 		}
@@ -219,7 +233,7 @@ public class MainActivity extends Activity {
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
+			
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);

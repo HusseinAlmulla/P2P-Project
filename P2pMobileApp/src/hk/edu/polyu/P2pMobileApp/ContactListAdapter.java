@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,26 +19,33 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import hk.edu.polyu.P2pMobileApp.task.AsyncTaskCallback;
+import hk.edu.polyu.P2pMobileApp.task.ConnectWebServiceTask;
 
-public class ContactListAdapter extends BaseAdapter {
+public class ContactListAdapter extends BaseAdapter implements AsyncTaskCallback {
 	private static final String TAG = "ContactListAdapter";
+	
+	private ProgressDialog progress;
 	
 	private ArrayList<String[]> mLocalContacts;
 	private int mDrawableResId;
 	
-    Context context;
+    Context mContext;
     int position;
     
-    private static LayoutInflater inflater=null;
+    private String tmpUsername;
+    private String tmpPhone;
     
-    public ContactListAdapter(MainActivity mainActivity) {
-    	this(mainActivity, null, 0);
+    private static LayoutInflater inflater = null;
+    
+    public ContactListAdapter(ContactFragment contactFragment) {
+    	this(contactFragment, null, 0);
 	}
 
-    public ContactListAdapter(MainActivity mainActivity, ArrayList<String[]> localContacts, int drawableResId) {
-        context=mainActivity;
+    public ContactListAdapter(ContactFragment contactFragment, ArrayList<String[]> localContacts, int drawableResId) {
+        mContext = contactFragment.getActivity();
         mLocalContacts = localContacts;
-        inflater = ( LayoutInflater )context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = ( LayoutInflater )mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     
     public void setList(ArrayList<String[]> localContacts, int drawableResId) {
@@ -84,8 +94,16 @@ public class ContactListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				ImageView img = (ImageView)v;
 				if (img.getId() == android.R.drawable.ic_menu_add) {
-					// add the record to user's P2P address book
-					addP2pContact(((String [])mLocalContacts.get(position))[0], ((String [])mLocalContacts.get(position))[1]);
+					
+		            ConnectivityManager connMgr = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+			        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+			        if (networkInfo != null && networkInfo.isConnected()) {
+						// for online only - validate the contact before adding the record to user's P2P address book
+						validateP2pContact(((String [])mLocalContacts.get(position))[0], ((String [])mLocalContacts.get(position))[1]);
+			        } else {
+						// for offline only - add the record to user's P2P address book
+						addP2pContact(((String [])mLocalContacts.get(position))[0], ((String [])mLocalContacts.get(position))[1]);
+			        }
 					
 				} else {
 					// delete the record from user's P2P address book
@@ -98,7 +116,7 @@ public class ContactListAdapter extends BaseAdapter {
 	}
 	
 	protected void addP2pContact(String name, String phone) {
-		SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
+		SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
 		
 		// phone is the key
 		Log.d(TAG, "### saving P2P contact: " + phone + ": " + name);
@@ -106,7 +124,7 @@ public class ContactListAdapter extends BaseAdapter {
 		editor.putString(phone, name);
 		editor.commit();
 		
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(mContext)
 			.setTitle("New P2P contact added").setMessage(name + "\n" + phone).setCancelable(true)
 			.setNeutralButton("OK", new DialogInterface.OnClickListener() {
 				@Override
@@ -118,7 +136,7 @@ public class ContactListAdapter extends BaseAdapter {
 	}
 	
 	protected void deleteP2pContact(String phone) {
-		SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
+		SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
 		
 		// phone is the key
 		if (prefs != null) {
@@ -129,7 +147,7 @@ public class ContactListAdapter extends BaseAdapter {
 				editor.remove(phone);
 				editor.commit();
 				
-		        new AlertDialog.Builder(context)
+		        new AlertDialog.Builder(mContext)
 				.setTitle("P2P contact is deleted").setMessage(name + "\n" + phone).setCancelable(true)
 				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
 					@Override
@@ -143,7 +161,7 @@ public class ContactListAdapter extends BaseAdapter {
 	}
 	
 	protected void refreshP2pContact() {
-		SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
+		SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
 		
 		if (prefs != null) {
 			Map<String,?> keys = prefs.getAll();
@@ -163,5 +181,46 @@ public class ContactListAdapter extends BaseAdapter {
 				notifyDataSetChanged();
 			}
 		}
+	}
+
+	protected void validateP2pContact(String name, String phone) {
+		// validate if the contact is already a registered user
+    	progress = ProgressDialog.show(mContext, "Connecting", "Please wait...", true);
+    	
+    	tmpUsername = name;
+    	tmpPhone = phone;
+    	
+    	//trigger network request
+    	new ConnectWebServiceTask(mContext, this).execute(
+    			mContext.getString(R.string.webservice_protocol),
+    			mContext.getString(R.string.webservice_url),
+    			mContext.getString(R.string.webservice_port),
+    			mContext.getString(R.string.webservice_get_user), 
+    			phone, 
+    			""); // we only validate the phone number if the recipient exists
+	}
+	
+	@Override
+	public void callback(Boolean result) {
+		progress.dismiss();
+		
+		if (result) {
+			// the contact is a registered user, can be added to local P2P contact
+			addP2pContact(tmpUsername, tmpPhone);
+		} else {
+            // display error
+            new AlertDialog.Builder(mContext)
+				.setTitle("Error").setMessage(tmpUsername + " is not a registered P2P user!").setCancelable(true)
+				.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				}).create().show();
+		}
+		
+		// reset the tmp variable
+		tmpUsername = "";
+		tmpPhone = "";
 	}
 }

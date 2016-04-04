@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,6 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
 import hk.edu.polyu.P2pMobileApp.gcm.GCMRegistrationService;
@@ -35,6 +40,9 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
 	private EditText nameEditText;
 	private EditText mobilePhoneEditText;
 
+	private CheckBox rememberMeCheckBox;
+	private boolean rememberMe = false;
+	
 	private ProgressDialog progress;
 	
 	@Override
@@ -44,11 +52,20 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
 
 		loginButton = (Button) findViewById(R.id.buttonlogin);
 		registerButton = (Button) findViewById(R.id.buttonRegister);
-	
+		
 		nameEditText = (EditText) findViewById(R.id.editTextName);
 		mobilePhoneEditText = (EditText) findViewById(R.id.editTextMobilePhone);
 		mobilePhoneEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 		mobilePhoneEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+		
+		rememberMeCheckBox = (CheckBox) findViewById(R.id.checkBoxRememberLogin);
+		rememberMeCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+		       public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+					Log.d(TAG, "onCheckedChanged: " + isChecked);
+					rememberMe = isChecked;
+		       }
+		});
 		
 		loginButton.setOnClickListener(this);
 		registerButton.setOnClickListener(this);
@@ -62,7 +79,7 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
             startService(intent);
         }
 	}
-	
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -105,10 +122,23 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
     }
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+		
+        // check if is remember me already activated
+        if (isRememberMeForNextLogon()) {
+        	prefillLogon();
+        } else {
+        	rememberMeCheckBox.setChecked(false); // release the register checkbox
+        	registerButton.setEnabled(true); // re-enabled the register button 
+        }
+	}
+	
+	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		((GlobalClass) this.getApplication()).setLoggedIn(false);	
+		((GlobalClass) this.getApplication()).setLoggedIn(false);
 	}
 	
 	@Override
@@ -124,7 +154,6 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
         	public void onClick(DialogInterface dialog, int which) {
         		finish();
         	}
-
         })
         .setNegativeButton("No", null)
         .show();
@@ -158,7 +187,32 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
 	        	nameEditText.setEnabled(false);
 	        	mobilePhoneEditText.setEnabled(false);
 	        	
-	        	authenticateUser();
+	        	// check if remember me is currently selected
+	        	if (rememberMe) {
+	        		// check if is remember me is activated already
+		            if (isRememberMeForNextLogon()) {
+		    			Toast.makeText(getApplicationContext(), "Login successful", Toast.LENGTH_LONG).show();
+		    			
+		        		((GlobalClass) this.getApplication()).setUserName(nameEditText.getText().toString());
+		        		((GlobalClass) this.getApplication()).setMobilePhone(mobilePhoneEditText.getText().toString());
+		            	((GlobalClass) this.getApplication()).setLoggedIn(true);
+		            	
+		            	// re-enable the text field if failure occur
+		            	nameEditText.setEnabled(true);
+		            	mobilePhoneEditText.setEnabled(true);
+		            	nameEditText.setText("");
+		            	mobilePhoneEditText.setText("");
+		            	
+		            	startActivity(((GlobalClass) this.getApplication()).getMainActivity());
+		            	
+		            } else {
+		            	// otherwise, this logon instance will still need to authenticate over the work
+		            	authenticateUser();
+		            }
+	        	} else {
+	        		authenticateUser(); // authenticate over the network
+	        	}
+	        	
 	            break;
 	            
 	        case R.id.buttonRegister:
@@ -235,13 +289,16 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
     		((GlobalClass) this.getApplication()).setMobilePhone(mobilePhoneEditText.getText().toString());
         	((GlobalClass) this.getApplication()).setLoggedIn(true);
         	
-        	startActivity(((GlobalClass) this.getApplication()).getMainActivity());
+        	// effectuate the remember settings after login process
+        	setRememberMeForNextLogon(rememberMe);
         	
         	// re-enable the text field if failure occur
         	nameEditText.setEnabled(true);
         	mobilePhoneEditText.setEnabled(true);
         	nameEditText.setText("");
         	mobilePhoneEditText.setText("");
+        	
+        	startActivity(((GlobalClass) this.getApplication()).getMainActivity());
         	
 		} else {
             // display error
@@ -257,6 +314,66 @@ public class LoginActivity extends Activity implements OnClickListener, AsyncTas
 			        	mobilePhoneEditText.setEnabled(true);
 					}
 				}).create().show();
+		}
+	}
+	
+	protected void setRememberMeForNextLogon(boolean remember) {
+		Log.d(TAG, "setRememberMeForNextLogon: " + remember);
+		
+		SharedPreferences prefs = getSharedPreferences(getString(R.string.p2p_express_logon), Context.MODE_PRIVATE);
+		
+		if (remember) {
+			String userName = ((GlobalClass) this.getApplication()).getUserName().toString();
+			String phone = ((GlobalClass) this.getApplication()).getMobilePhone().toString();
+			Log.d(TAG, "logon name: " + userName);
+			Log.d(TAG, "logon password: " + phone);
+			
+			Editor editor = prefs.edit();
+			editor.putBoolean("rememberMe", true);
+			editor.putString("logonName", userName);
+			editor.putString("logonPassword", phone);
+			editor.commit();
+		} else {
+			Editor editor = prefs.edit();
+			editor.putBoolean("rememberMe", false);
+			editor.putString("logonName", "");
+			editor.putString("logonPassword", "");
+			editor.commit();
+		}
+	}
+	
+	protected boolean isRememberMeForNextLogon() {
+		SharedPreferences prefs = getSharedPreferences(getString(R.string.p2p_express_logon), Context.MODE_PRIVATE);
+		
+		if (prefs != null) {
+			boolean isRememberMeActivted = prefs.getBoolean("rememberMe", false);
+			Log.d(TAG, "isRememberMeForNextLogon: " + isRememberMeActivted);
+			return isRememberMeActivted;
+		}
+		
+		Log.d(TAG, "isRememberMeForNextLogon: " + false);
+		return false;
+	}
+	
+	protected void prefillLogon() {
+		Log.d(TAG, "prefillLogon...");
+		SharedPreferences prefs = getSharedPreferences(getString(R.string.p2p_express_logon), Context.MODE_PRIVATE);
+		
+		if (prefs != null) {
+			String userName = prefs.getString("logonName", "");
+			String phone = prefs.getString("logonPassword", "");
+			Log.d(TAG, "logon name: " + userName);
+			Log.d(TAG, "logon password: " + phone);
+			
+			if (userName!=null && !userName.equals("") && 
+					phone!=null && !phone.equals("")
+			) {
+				// both logon username and password (phone) exist in storage update the UI
+				nameEditText.setText(userName);
+				mobilePhoneEditText.setText(phone);
+				rememberMeCheckBox.setChecked(true);
+				registerButton.setEnabled(false);
+			}
 		}
 	}
 }
