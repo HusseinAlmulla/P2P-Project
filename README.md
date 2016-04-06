@@ -2,12 +2,12 @@
 
 This application aims to provide mobile service for money transfer among friends.
 
-High-level use cases overview:
-1. User download the mobile application from Google Play
-2. Register an account and add personal bank account
-3. Invite other users to participate in transaction. User can manage his/her contact list.
-4. Select a friend and transfer money
-5. After successfully transferred the money, receiver will receive a push notification.
+High-level use cases overview:<br>
+1. User download the mobile application from Google Play<br>
+2. Register an account and add personal bank account<br>
+3. Invite other users to participate in transaction. User can manage his/her contact list.<br>
+4. Select a friend and transfer money<br>
+5. After successfully transferred the money, receiver will receive a push notification.<br>
 <br>
 
 # Resful Web Services
@@ -55,7 +55,23 @@ https://docs.jboss.org/hibernate/search/4.2/reference/en-US/html/search-configur
 https://docs.jboss.org/hibernate/search/3.3/reference/en-US/html/search-query.html<br>
 https://docs.jboss.org/hibernate/search/3.2/reference/en/html/manual-index-changes.html<br>
 
+# Android Mobile App
+
+<b>Development Environment</b>
+- JDK 1.8.0.73
+- Maven 3.0.5
+- Eclipse IDE Mars.2
+- Android SDK 19
+- Android Support Library v4 r23
+- Google Play Service 8.1.0
+- Jackson JSON library 2.6.1
+<br>
+
+<b>References:</b><br>
+http://developer.android.com/index.html<br>
+
 # Amazon Free Web Hosting Service
+
 We use AWS (Amazon Web Service) Free Tier which is free available for 12 months, 750 hours per month of Linux virtual server (EC2 instance). Our web apps is structured into 2 tiers, the first tier is an application server, which is responsible for the web service functionality. The second tier is a database server, which is responsible for data storage, while the mobile app is for presenting the user interface and providing limited offline functionality.
 
 <b>AWS SSH command</b>
