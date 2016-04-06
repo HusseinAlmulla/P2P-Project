@@ -27,7 +27,7 @@ import hk.edu.polyu.P2pMobileApp.task.ConnectWebServiceTask;
 public class NetworkChangeReceiver extends BroadcastReceiver implements AsyncTaskCallback {
 	private static final String TAG = "NetworkChangeReceiver";
 	
-	protected static int ID = 999;
+	protected static int ID = 20;
 	
 	protected Context mContext;
 	
@@ -108,25 +108,30 @@ public class NetworkChangeReceiver extends BroadcastReceiver implements AsyncTas
         
         mBuilder.setSmallIcon(R.drawable.ic_launcher);
         
-        String message = "";
-        if (result) {
-            mBuilder.setContentTitle("Successful");
-            message = "Previous transaction is processed, the recipient will be notified.";
-            mBuilder.setContentText(message);
-        } else {
-            mBuilder.setContentTitle("Error");
-            message = "Previous transaction cannot be processed";
-            mBuilder.setContentText(message); 
-        }
-        
 		// Applying an expanded layout to a notification
 		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-		// Sets a title for the Inbox in expanded layout
-		inboxStyle.setBigContentTitle("P2P transfer received");
 		
-		String p2pMsg1 = message.substring(0, message.indexOf(",") + 1);
-		String p2pMsg2 = message.substring(message.indexOf(",") + 2, message.indexOf(".") + 1);
-
+        String p2pMsg1 = "";
+        String p2pMsg2 = "";
+        
+        if (result) {
+        	mBuilder.setContentTitle("P2P transfer sent successfully");
+        	mBuilder.setContentText("Previous transaction is processed,\nthe recipient will soon be notified.");
+        	
+    		// Sets a title for the Inbox in expanded layout
+    		inboxStyle.setBigContentTitle("P2P transfer sent successfully");
+            p2pMsg1 = "Previous transaction is processed, ";
+            p2pMsg2 = "the recipient will soon be notified.";
+            
+        } else {
+        	mBuilder.setContentTitle("P2P transfer sent failure");
+        	mBuilder.setContentText("Previous transaction cannot be processed.");
+        	
+        	inboxStyle.setBigContentTitle("P2P transfer sent failure");
+            p2pMsg1 = "Previous transaction cannot be processed.";
+            p2pMsg2 = "";
+        }
+		
 		String[] events = new String[2];
 		events[0] = p2pMsg1;
 		events[1] = p2pMsg2;
@@ -153,8 +158,8 @@ public class NetworkChangeReceiver extends BroadcastReceiver implements AsyncTas
         mNotificationManager.notify(ID, mBuilder.build());
         
         ID--;
-        if (ID == 0) {
-        	ID = 999;
+        if (ID == 11) {
+        	ID = 20;
         }
         Log.d(TAG, "@@ next notification ID: " + ID);
 	}

@@ -17,7 +17,7 @@ import hk.edu.polyu.P2pMobileApp.R;
 public class GCMListenerService extends GcmListenerService {
 	private static final String TAG = "GCMListenerService";
 	
-	protected static int ID = 999;
+	protected static int ID = 10;
 	
     /**
      * Called when message is received.
@@ -105,8 +105,8 @@ public class GCMListenerService extends GcmListenerService {
         notificationManager.notify(ID, notificationBuilder.build());
         
         ID--;
-        if (ID == 0) {
-        	ID = 999;
+        if (ID == 1) {
+        	ID = 10;
         }
         Log.d(TAG, "@@ next notification ID: " + ID);
     }
