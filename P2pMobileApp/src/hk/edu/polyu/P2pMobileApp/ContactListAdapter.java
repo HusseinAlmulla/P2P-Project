@@ -101,10 +101,7 @@ public class ContactListAdapter extends BaseAdapter implements AsyncTaskCallback
 						// for online only - validate the contact before adding the record to user's P2P address book
 						validateP2pContact(((String [])mLocalContacts.get(position))[0], ((String [])mLocalContacts.get(position))[1]);
 			        } else {
-<<<<<<< HEAD
-=======
 			        	Log.d(TAG, "device currently offline, proceed adding contact to P2P address book without validating with server");
->>>>>>> dev
 						// for offline only - add the record to user's P2P address book
 						addP2pContact(((String [])mLocalContacts.get(position))[0], ((String [])mLocalContacts.get(position))[1]);
 			        }

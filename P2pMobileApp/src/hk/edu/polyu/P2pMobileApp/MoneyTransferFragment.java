@@ -3,24 +3,17 @@ package hk.edu.polyu.P2pMobileApp;
 import java.util.ArrayList;
 import java.util.Map;
 
-<<<<<<< HEAD
-=======
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
->>>>>>> dev
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-<<<<<<< HEAD
-=======
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
->>>>>>> dev
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,11 +26,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-<<<<<<< HEAD
 import android.widget.Toast;
-=======
 import hk.edu.polyu.P2pMobileApp.json.Transaction;
->>>>>>> dev
 import hk.edu.polyu.P2pMobileApp.task.AsyncTaskCallback;
 import hk.edu.polyu.P2pMobileApp.task.ConnectWebServiceTask;
 
@@ -47,10 +37,7 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 	private ProgressDialog progress;
 	
 	MainActivity mainActivity;
-<<<<<<< HEAD
-=======
 	Context mContext;
->>>>>>> dev
 	
 	EditText editTextMoneyTransferAmount;
 	Spinner spinnerCurrencyList;
@@ -92,7 +79,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 
 	@Override
 	public void onClick(View v) {
-<<<<<<< HEAD
 		//Toast.makeText(mainActivity, "You Clicked "+v.getId(), Toast.LENGTH_LONG).show();
 		if (v instanceof Button) {
 			String sender = ((GlobalClass) this.getActivity().getApplication()).getMobilePhone();
@@ -134,12 +120,10 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 			}
 			
 			if (recipient==null) {
-=======
 		if (v instanceof Button) {
 			
 			String recipientPhone = (String)spinnerFriendList.getSelectedItem();
 			if (recipientPhone==null) {
->>>>>>> dev
 				// no recipient found from P2P address book
 	            // reminder user to create
 	            new AlertDialog.Builder(this.getActivity())
@@ -151,8 +135,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 						}
 					}).create().show();
 			}
-<<<<<<< HEAD
-=======
 			
 			ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -164,8 +146,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 				// for offline only - save transactions to local cache 
 				cacheTransaction();
 			}
-			
->>>>>>> dev
 		}
 	}
 
@@ -177,7 +157,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		//Toast.makeText(mainActivity, "onNothingSelected", Toast.LENGTH_LONG).show();
-<<<<<<< HEAD
 	}
 
 	protected String[] getSavedP2pContacts() {
@@ -205,8 +184,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 		
 		return null;
 	}
-
-=======
 	}
 
 	protected String[] getSavedP2pContacts() {
@@ -287,18 +264,14 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 		}
 	}
 
->>>>>>> dev
 	@Override
 	public void callback(Boolean result) {
 		progress.dismiss();
 		
 		if (result) {
 			// prepare the dialog message;
-<<<<<<< HEAD
 			String msg = "Transaction is processed, the recipient will be notified. You can reference this transaction from transaction history.";
-=======
 			String msg = "Transaction is processed, the recipient will be notified.";
->>>>>>> dev
 			
 			// display successful
             new AlertDialog.Builder(this.getActivity())
@@ -330,8 +303,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 		}
 	}
 	
-<<<<<<< HEAD
-=======
 	protected void cacheTransaction() {
 		Log.d(TAG, "cacheTransaction");
 		String senderPhone = ((GlobalClass) this.getActivity().getApplication()).getMobilePhone();
@@ -436,5 +407,4 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 			}).create().show();
 		}
 	}
->>>>>>> dev
 }

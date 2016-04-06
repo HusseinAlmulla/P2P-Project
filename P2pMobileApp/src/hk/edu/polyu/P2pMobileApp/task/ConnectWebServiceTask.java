@@ -215,9 +215,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	int port = Integer.parseInt(params[2]);
     	String service = params [3];
     	
-<<<<<<< HEAD
     	try {
-=======
     	BufferedReader br = null;
     	
     	try {
@@ -229,7 +227,6 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     			return false;
     		}
     		
->>>>>>> dev
 			URL mUrl = new URL(protocol, url, port, service);
 			Log.d(TAG, "connecting to: " + mUrl.toString());
 	        HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
@@ -260,11 +257,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
-<<<<<<< HEAD
 				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-=======
 				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
->>>>>>> dev
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					sb.append(line + "\n");
@@ -279,9 +273,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 	    	
     	} catch (Exception exc) {
     		Log.e(TAG, exc.getMessage(), exc);
-<<<<<<< HEAD
     	}
-=======
     		
 		} finally {
 		    // Makes sure that the reader is closed after the app is
@@ -294,7 +286,6 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 				}
 			}
 		}
->>>>>>> dev
     	
     	return result;
     }
