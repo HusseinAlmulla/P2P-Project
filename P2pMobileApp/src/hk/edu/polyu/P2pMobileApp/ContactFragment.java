@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 public class ContactFragment extends Fragment {
@@ -22,7 +21,7 @@ public class ContactFragment extends Fragment {
 	private ContactListAdapter contactListAdapter;
 	
 	ListView contactListView;
-	EditText editTextSearchContact;
+	//EditText editTextSearchContact;
 	Button buttonSearchContact;
 	MainActivity mainActivity;
 	
@@ -39,11 +38,11 @@ public class ContactFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_contact, container, false);
 		
 		// Fetch the user's P2P address book
-		contactListAdapter = new ContactListAdapter(mainActivity);
+		contactListAdapter = new ContactListAdapter(this);
 		contactListAdapter.refreshP2pContact();
 		
 		contactListView = (ListView) rootView.findViewById(R.id.contactListView);
-		editTextSearchContact = (EditText)rootView.findViewById(R.id.editTextSearchContact);
+		//editTextSearchContact = (EditText)rootView.findViewById(R.id.editTextSearchContact);
 		buttonSearchContact = (Button)rootView.findViewById(R.id.buttonSearchContact);
 		
 		buttonSearchContact.setOnClickListener(new OnClickListener() {            

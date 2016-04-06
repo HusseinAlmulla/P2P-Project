@@ -1,6 +1,7 @@
 package hk.edu.polyu.P2pMobileApp.task;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -35,19 +36,15 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 	
 	@Override
 	protected Boolean doInBackground(String... params) {
-		String protocol = params [0];
-		//Log.d(TAG, "protocol: " + protocol);
-		String url = params[1];
-		//Log.d(TAG, "url: " + url);
-		int port = Integer.parseInt(params[2]);
-		//Log.d(TAG, "port: " + port);
 		String service = params [3];
-		//Log.d(TAG, "service: " + service);
+		Log.d(TAG, "requested webservice: " + service);
 		
 		if (service.equals(mContext.getString(R.string.webservice_create_user))) {
 			return createUserRequest(params);
 		} else if (service.equals(mContext.getString(R.string.webservice_get_user))) {
 			return getUserRequest(params);
+		} else if (service.equals(mContext.getString(R.string.webservice_send_money))) {
+			return sendMoneyRequest(params);
 		} else {
 			return dummyRequest(params);
 		}
@@ -66,6 +63,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	String url = params[1];
     	int port = Integer.parseInt(params[2]);
     	String service = params [3];
+    	
+    	BufferedReader br = null;
     	
 		try {
 			URL mUrl = new URL(protocol, url, port, service);
@@ -99,7 +98,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					sb.append(line + "\n");
@@ -114,6 +113,17 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 		} catch (Exception exc) {
 			Log.e(TAG, exc.getMessage(), exc);
+			
+		} finally {
+		    // Makes sure that the reader is closed after the app is
+		    // finished using it.
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe) {
+					Log.e(TAG, ioe.getMessage(), ioe);
+				}
+			}
 		}
 		
 		return result;
@@ -129,6 +139,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	
     	String phone = params[4];
     	String name = params[5];
+    	
+    	BufferedReader br = null;
     	
 		try {
 			URL mUrl = new URL(protocol, url, port, service + "/" + phone);
@@ -148,7 +160,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					sb.append(line + "\n");
@@ -159,9 +171,18 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 				// convert the incoming JSON message body into POJO
 				ObjectMapper jackson = new ObjectMapper();
 				User user = jackson.readValue(sb.toString(), User.class);
-				// compare server returned name and user input name
-				if (user.getName().equals(name)) {
-					result = true;
+				
+				if (user!=null && user.getName()!=null && !user.getName().equals("")) {
+					// phone record is found from DB
+					if (name!=null && !name.equals("")) {
+						// compare server returned name and user input name
+						if (user.getName().equals(name)) {
+							result = true;
+						}
+					} else {
+						// name is not supplied in the request, skip compare the name
+						result = true;
+					}
 				}
 				
 			} else {
@@ -170,9 +191,100 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 		} catch (Exception exc) {
 			Log.e(TAG, exc.getMessage(), exc);
+			
+		} finally {
+		    // Makes sure that the reader is closed after the app is
+		    // finished using it.
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe) {
+					Log.e(TAG, ioe.getMessage(), ioe);
+				}
+			}
 		}
 		
 		return result;
+    }
+    
+    protected Boolean sendMoneyRequest(String...params) {
+    	Boolean result = Boolean.valueOf(false);
+    	
+    	String protocol = params [0];
+    	String url = params[1];
+    	int port = Integer.parseInt(params[2]);
+    	String service = params [3];
+    	
+    	BufferedReader br = null;
+    	
+    	try {
+    		// before submitting the transaction, validate the recipient is a registered P2P user
+    		Boolean isRecipientValid = getUserRequest(new String[] {params[0], params[1], params[2], mContext.getString(R.string.webservice_get_user), params[7], ""});
+    		if (!isRecipientValid) {
+    			Log.e(TAG, "un-identified recipient phone number: " + params[7]);
+    			// abort the transaction
+    			return false;
+    		}
+    		
+			URL mUrl = new URL(protocol, url, port, service);
+			Log.d(TAG, "connecting to: " + mUrl.toString());
+	        HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
+	        conn.setReadTimeout(10000 /* milliseconds */);
+	        conn.setConnectTimeout(10000 /* milliseconds */);
+			conn.setUseCaches(false); 
+			conn.setRequestProperty("Content-Type","application/json");
+			
+	    	// output data to server
+	    	conn.setRequestMethod("POST");
+	    	conn.setDoOutput(true);
+	    	conn.setDoInput(true);
+	    	
+	    	JSONObject jsonData = new JSONObject();
+	    	jsonData.put("senderPhone", params[4]);
+	    	jsonData.put("currency", params[5]);
+	    	jsonData.put("amount", params[6]);
+	    	jsonData.put("receiverPhone", params[7]);
+	    	jsonData.put("message", params[8]);
+	    	Log.d(TAG, "json data: " + jsonData);
+	    	
+	    	OutputStreamWriter outputStream = new OutputStreamWriter(conn.getOutputStream());
+	    	outputStream.write(jsonData.toString());
+	    	outputStream.flush();
+			
+		    int responseCode = conn.getResponseCode();
+		    Log.d(TAG, "The response code is: " + responseCode);
+		    
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+				StringBuilder sb = new StringBuilder();
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				br.close();
+				Log.d(TAG, "server response: " + sb.toString());
+				result = true;
+				
+			} else {
+				Log.d(TAG, "error response: " + conn.getResponseMessage());
+			}
+	    	
+    	} catch (Exception exc) {
+    		Log.e(TAG, exc.getMessage(), exc);
+    		
+		} finally {
+		    // Makes sure that the reader is closed after the app is
+		    // finished using it.
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe) {
+					Log.e(TAG, ioe.getMessage(), ioe);
+				}
+			}
+		}
+    	
+    	return result;
     }
     
     protected Boolean dummyRequest(String...params) {

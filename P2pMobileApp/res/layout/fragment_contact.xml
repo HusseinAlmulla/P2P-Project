@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
+        <!-- 
         <EditText
             android:id="@+id/editTextSearchContact"
             android:layout_width="wrap_content"
@@ -19,10 +20,11 @@
             android:ems="10" >
             <requestFocus />
         </EditText>
-
+		-->
+		
         <Button
             android:id="@+id/buttonSearchContact"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/contact_page_search" />
 

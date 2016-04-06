@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.VIBRATE" />
     
+    
     <!--
      Creates a custom permission so only this app can receive its messages.
 
@@ -38,6 +39,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
             android:name="hk.edu.polyu.P2pMobileApp.LoginActivity"
             android:label="@string/app_name" 
@@ -65,6 +67,13 @@
             android:screenOrientation="portrait" 
             android:launchMode="singleTask">
         </activity>
+        
+        <!-- Network change receiver for monitoring network connectivity changes -->
+        <receiver android:name="hk.edu.polyu.P2pMobileApp.receiver.NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
         
         <!-- [Start GCM registration service] -->
         <service
