@@ -9,6 +9,8 @@ High-level use cases overview:<br>
 4. Select a friend and transfer money<br>
 5. After successfully transferred the money, receiver will receive a push notification.<br>
 <br>
+This is initially developed by myself and my group teammate (Yeung Mei Yan Becky and Chan Yee Kwan) as the final project of the course - <u>COMP5527 Mobile Computing and Data Management</u> during our Master Study in HK Polytechnic University.
+<br>
 
 # Resful Web Services
 
