@@ -56,19 +56,12 @@
 
     <string name="p2p_address_book">P2pContacts</string>
     <string name="p2p_express_logon">P2pLogon</string>
-<<<<<<< HEAD
-=======
     <string name="p2p_cached_transaction">P2pCachedTx</string>
->>>>>>> dev
     
     <string name="gcm_defaultSenderId">578005844236</string> <!-- Jeffrey sender ID -->
     
     <string name="webservice_protocol">http</string>
-<<<<<<< HEAD
     <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string>
-=======
-    <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string> 
->>>>>>> dev
     <!-- <string name="webservice_url">192.168.0.103</string> -->
     <string name="webservice_port">8080</string>
     <string name="webservice_test">P2pWebServices/rest/hello</string>
