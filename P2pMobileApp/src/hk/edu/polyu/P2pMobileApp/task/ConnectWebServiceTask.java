@@ -1,6 +1,7 @@
 package hk.edu.polyu.P2pMobileApp.task;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -35,14 +36,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 	
 	@Override
 	protected Boolean doInBackground(String... params) {
-		String protocol = params [0];
-		//Log.d(TAG, "protocol: " + protocol);
-		String url = params[1];
-		//Log.d(TAG, "url: " + url);
-		int port = Integer.parseInt(params[2]);
-		//Log.d(TAG, "port: " + port);
 		String service = params [3];
-		//Log.d(TAG, "service: " + service);
+		Log.d(TAG, "requested webservice: " + service);
 		
 		if (service.equals(mContext.getString(R.string.webservice_create_user))) {
 			return createUserRequest(params);
@@ -68,6 +63,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	String url = params[1];
     	int port = Integer.parseInt(params[2]);
     	String service = params [3];
+    	
+    	BufferedReader br = null;
     	
 		try {
 			URL mUrl = new URL(protocol, url, port, service);
@@ -101,7 +98,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					sb.append(line + "\n");
@@ -116,6 +113,17 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 		} catch (Exception exc) {
 			Log.e(TAG, exc.getMessage(), exc);
+			
+		} finally {
+		    // Makes sure that the reader is closed after the app is
+		    // finished using it.
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe) {
+					Log.e(TAG, ioe.getMessage(), ioe);
+				}
+			}
 		}
 		
 		return result;
@@ -131,6 +139,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	
     	String phone = params[4];
     	String name = params[5];
+    	
+    	BufferedReader br = null;
     	
 		try {
 			URL mUrl = new URL(protocol, url, port, service + "/" + phone);
@@ -150,7 +160,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					sb.append(line + "\n");
@@ -181,6 +191,17 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 		} catch (Exception exc) {
 			Log.e(TAG, exc.getMessage(), exc);
+			
+		} finally {
+		    // Makes sure that the reader is closed after the app is
+		    // finished using it.
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe) {
+					Log.e(TAG, ioe.getMessage(), ioe);
+				}
+			}
 		}
 		
 		return result;
@@ -194,7 +215,21 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	int port = Integer.parseInt(params[2]);
     	String service = params [3];
     	
+<<<<<<< HEAD
     	try {
+=======
+    	BufferedReader br = null;
+    	
+    	try {
+    		// before submitting the transaction, validate the recipient is a registered P2P user
+    		Boolean isRecipientValid = getUserRequest(new String[] {params[0], params[1], params[2], mContext.getString(R.string.webservice_get_user), params[7], ""});
+    		if (!isRecipientValid) {
+    			Log.e(TAG, "un-identified recipient phone number: " + params[7]);
+    			// abort the transaction
+    			return false;
+    		}
+    		
+>>>>>>> dev
 			URL mUrl = new URL(protocol, url, port, service);
 			Log.d(TAG, "connecting to: " + mUrl.toString());
 	        HttpURLConnection conn = (HttpURLConnection) mUrl.openConnection();
@@ -225,7 +260,11 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
+<<<<<<< HEAD
 				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+=======
+				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+>>>>>>> dev
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					sb.append(line + "\n");
@@ -240,7 +279,22 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 	    	
     	} catch (Exception exc) {
     		Log.e(TAG, exc.getMessage(), exc);
+<<<<<<< HEAD
     	}
+=======
+    		
+		} finally {
+		    // Makes sure that the reader is closed after the app is
+		    // finished using it.
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ioe) {
+					Log.e(TAG, ioe.getMessage(), ioe);
+				}
+			}
+		}
+>>>>>>> dev
     	
     	return result;
     }

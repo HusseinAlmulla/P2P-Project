@@ -17,6 +17,8 @@ import hk.edu.polyu.P2pMobileApp.R;
 public class GCMListenerService extends GcmListenerService {
 	private static final String TAG = "GCMListenerService";
 	
+	protected static int ID = 999;
+	
     /**
      * Called when message is received.
      *
@@ -61,22 +63,51 @@ public class GCMListenerService extends GcmListenerService {
      */
     private void sendNotification(String message) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+		// Just bring the app to the foreground if it is running already
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("GCM Message")
+                .setContentTitle("P2P transfer received")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		// Applying an expanded layout to a notification
+		NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+		// Sets a title for the Inbox in expanded layout
+		inboxStyle.setBigContentTitle("P2P transfer received");
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+		String p2pMsg1 = message.substring(0, message.indexOf(",") + 1);
+		String p2pMsg2 = message.substring(message.indexOf(",") + 2, message.indexOf("!") + 1);
+		String p2pMsg3 = message.substring(message.indexOf("!") + 1, message.indexOf(":") + 1);
+		String p2pMsg4 = message.substring(message.indexOf(":") + 1, message.length());
+
+		String[] events = new String[2];
+		events[0] = p2pMsg1;
+		events[1] = p2pMsg2;
+		if (!p2pMsg4.trim().equals("")) {
+			inboxStyle.setSummaryText(p2pMsg3 + p2pMsg4);
+		}
+		
+		// Moves events into the expanded layout
+		for (int i = 0; i < events.length; i++) {
+			inboxStyle.addLine(events[i]);
+		}
+		
+        // Moves the expanded layout object into the notification object.
+        notificationBuilder.setStyle(inboxStyle);
+        
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(ID, notificationBuilder.build());
+        
+        ID--;
+        if (ID == 0) {
+        	ID = 999;
+        }
+        Log.d(TAG, "@@ next notification ID: " + ID);
     }
 }

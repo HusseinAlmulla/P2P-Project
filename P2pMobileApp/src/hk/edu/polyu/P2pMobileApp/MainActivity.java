@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
+	protected static final String TAG = "MainActivity";
+	
 	// declare properties
 	private String[] mNavigationDrawerItemTitles;
 	private DrawerLayout mDrawerLayout;
@@ -110,29 +112,32 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
+		
+		Log.d(TAG, "is login? " + ((GlobalClass) this.getApplication()).isLoggedIn());
 		if(!((GlobalClass) this.getApplication()).isLoggedIn()){
 			startActivity(((GlobalClass) this.getApplication()).getLoginActivity());
+			finish();
 		}
-		
 	}
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
-		//TODO set timer
-		((GlobalClass) this.getApplication()).setLoggedIn(false);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
 		
+		if (isFinishing()) {
+			((GlobalClass) this.getApplication()).setLoggedIn(false);
+		}
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
-		((GlobalClass) this.getApplication()).setLoggedIn(false);
-		
 	}
 
 	@Override
