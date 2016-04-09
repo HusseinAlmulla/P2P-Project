@@ -214,10 +214,8 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     	String url = params[1];
     	int port = Integer.parseInt(params[2]);
     	String service = params [3];
-    	
-    	try {
     	BufferedReader br = null;
-    	
+
     	try {
     		// before submitting the transaction, validate the recipient is a registered P2P user
     		Boolean isRecipientValid = getUserRequest(new String[] {params[0], params[1], params[2], mContext.getString(R.string.webservice_get_user), params[7], ""});
@@ -257,7 +255,6 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
 		    
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				StringBuilder sb = new StringBuilder();
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 				br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 				String line = null;
 				while ((line = br.readLine()) != null) {
@@ -275,7 +272,7 @@ public class ConnectWebServiceTask extends AsyncTask<String, String, Boolean> {
     		Log.e(TAG, exc.getMessage(), exc);
     	}
     		
-		} finally {
+		 finally {
 		    // Makes sure that the reader is closed after the app is
 		    // finished using it.
 			if (br != null) {
