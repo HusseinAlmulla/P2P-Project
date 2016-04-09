@@ -120,31 +120,33 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 			}
 			
 			if (recipient==null) {
-		if (v instanceof Button) {
-			
-			String recipientPhone = (String)spinnerFriendList.getSelectedItem();
-			if (recipientPhone==null) {
-				// no recipient found from P2P address book
-	            // reminder user to create
-	            new AlertDialog.Builder(this.getActivity())
-					.setTitle("Error").setMessage("P2P address book is empty!\nPlease use the contact list feature to add recipients.").setCancelable(true)
-					.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
-						}
-					}).create().show();
-			}
-			
-			ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-			if (networkInfo != null && networkInfo.isConnected()) {
-				// for online only - immediately submit the transaction to server
-				sendMoney();
-			} else {
-				Log.d(TAG, "device currently offline, saving transactions to local cache and delay the transfer until device comes online again");
-				// for offline only - save transactions to local cache 
-				cacheTransaction();
+				if (v instanceof Button) {
+					
+					String recipientPhone = (String)spinnerFriendList.getSelectedItem();
+					if (recipientPhone==null) {
+						// no recipient found from P2P address book
+			            // reminder user to create
+			            new AlertDialog.Builder(this.getActivity())
+							.setTitle("Error").setMessage("P2P address book is empty!\nPlease use the contact list feature to add recipients.").setCancelable(true)
+							.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.cancel();
+								}
+							}).create().show();
+					}
+					
+					ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+					NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+					if (networkInfo != null && networkInfo.isConnected()) {
+						// for online only - immediately submit the transaction to server
+						sendMoney();
+					} else {
+						Log.d(TAG, "device currently offline, saving transactions to local cache and delay the transfer until device comes online again");
+						// for offline only - save transactions to local cache 
+						cacheTransaction();
+					}
+				}
 			}
 		}
 	}
@@ -157,33 +159,6 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		//Toast.makeText(mainActivity, "onNothingSelected", Toast.LENGTH_LONG).show();
-	}
-
-	protected String[] getSavedP2pContacts() {
-		SharedPreferences prefs = mainActivity.getSharedPreferences(getString(R.string.p2p_address_book), Context.MODE_PRIVATE);
-		
-		if (prefs != null) {
-			Map<String,?> keys = prefs.getAll();
-			
-			if (keys!=null || !keys.isEmpty()) {
-				ArrayList<String> tmp = new ArrayList<String>();
-				
-				for (Map.Entry<String, ?> entry : keys.entrySet()) {
-					String phone = entry.getKey();
-					String name = entry.getValue().toString();
-					Log.d(TAG, "@@ phone: " + phone+ ", name: " + name);
-					tmp.add(name + " tel: " + phone);
-				}
-				
-				// convert the ArrayList to Array
-				String[] p2pContacts = new String[tmp.size()];
-				p2pContacts = tmp.toArray(p2pContacts);
-				return p2pContacts;
-			}
-		}
-		
-		return null;
-	}
 	}
 
 	protected String[] getSavedP2pContacts() {
@@ -271,7 +246,7 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 		if (result) {
 			// prepare the dialog message;
 			String msg = "Transaction is processed, the recipient will be notified. You can reference this transaction from transaction history.";
-			String msg = "Transaction is processed, the recipient will be notified.";
+//			String msg = "Transaction is processed, the recipient will be notified.";
 			
 			// display successful
             new AlertDialog.Builder(this.getActivity())
