@@ -80,7 +80,7 @@ http://developer.android.com/index.html<br>
 
 We encountered an unsolvable issue with hibernate indexing where SQL query will just hung when the server has been running for 1-2 days. As a workaround to this issue, we have to create a cronjob on linux so that it reboot each day around 5am, then upon the startup of tomcat web server, we executed a dummy web service request (via CURL) so that it will instantiate the re-indexing of hibernate.<br> 
 
-<b>Dummy Web Service Request</b>
+<b>Dummy Web Service Request</b><br>
 http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/hello/user<br>
 
 <b>References:</b><br>
