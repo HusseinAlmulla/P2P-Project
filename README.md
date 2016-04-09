@@ -1,6 +1,6 @@
 # P2P-Project
 
-This application aims to provide mobile service for money transfer among friends.
+This application aims to provide mobile service for money transfer among friends.<br>
 
 High-level use cases overview:<br>
 1. User download the mobile application from Google Play<br>
@@ -76,10 +76,21 @@ https://play.google.com/store/apps/details?id=hk.edu.polyu.P2pMobileApp <b>Live<
 <b>References:</b><br>
 http://developer.android.com/index.html<br>
 
+# Linux
+
+We encountered an unsolvable issue with hibernate indexing where SQL query will just hung when the server has been running for 1-2 days. As a workaround to this issue, we have to create a cronjob on linux so that it reboot each day around 5am, then upon the startup of tomcat web server, we executed a dummy web service request (via CURL) so that it will instantiate the re-indexing of hibernate.<br> 
+
+<b>Dummy Web Service Request</b>
+http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/hello/user<br>
+
+<b>References:</b><br>
+https://www.liferay.com/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts<br>
+https://shabirimam.wordpress.com/2009/03/10/adding-script-to-run-at-startup-or-shutdown<br>
+http://serverfault.com/questions/155239/how-can-i-schedule-a-reboot-in-linux<br>
 
 # Amazon Free Web Hosting Service
 
-We use AWS (Amazon Web Service) Free Tier which is free available for 12 months, 750 hours per month of Linux virtual server (EC2 instance). Our web apps is structured into 2 tiers, the first tier is an application server, which is responsible for the web service functionality. The second tier is a database server, which is responsible for data storage, while the mobile app is for presenting the user interface and providing limited offline functionality.
+We use AWS (Amazon Web Service) Free Tier which is free available for 12 months, 750 hours per month of Linux virtual server (EC2 instance). Our web apps is structured into 2 tiers, the first tier is an application server, which is responsible for the web service functionality. The second tier is a database server, which is responsible for data storage, while the mobile app is for presenting the user interface and providing limited offline functionality.<br>
 
 <b>AWS SSH command</b>
 - ssh -i "comp5527.pem" ec2-user@ec2-52-10-73-179.us-west-2.compute.amazonaws.com<br>
