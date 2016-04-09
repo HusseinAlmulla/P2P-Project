@@ -69,10 +69,13 @@ https://docs.jboss.org/hibernate/search/3.2/reference/en/html/manual-index-chang
 - Jackson JSON library 2.6.1
 <br>
 
+<b>Release:</b><br>
+https://play.google.com/apps/testing/hk.edu.polyu.P2pMobileApp <b>Subscribed as beta tester</b><br>
+https://play.google.com/store/apps/details?id=hk.edu.polyu.P2pMobileApp <b>Live</b><br>
+
 <b>References:</b><br>
 http://developer.android.com/index.html<br>
-https://play.google.com/store/apps/details?id=hk.edu.polyu.P2pMobileApp <b>Live</b><br>
-http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pMobileApp-0.1.apk <b>Development</b><br>
+
 
 # Amazon Free Web Hosting Service
 
