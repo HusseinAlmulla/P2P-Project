@@ -1,0 +1,48 @@
+#!/bin/bash
+# chkconfig: 345 85 20
+
+export LOG=$HOME/job.log
+export TOMCAT_HOME="/home/ec2-user/apache-tomcat-8.0.33"
+
+getTomcatPid() {
+    echo `ps aux | grep org.apache.catalina.startup.Bootstrap | grep -v grep | awk '{ print $2 }'`
+}
+
+startTomcat() {
+    # Must path to webapps folder before startup tomcat
+    # so this is where the hibernate_index folder will be created
+    cd $TOMCAT_HOME/webapps
+
+    echo "Deleting old log files ..." >> $LOG
+    rm -rf $TOMCAT_HOME/logs/* >>$LOG 2>&1
+
+    echo "Starting tomcat ..." >>$LOG
+    sudo $TOMCAT_HOME/bin/startup.sh >>$LOG 2>&1
+}
+
+curlRequest() {
+    echo "Running CURL request 1 ..." >>$LOG
+    curl -X GET http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/getUser/+85262741153 -o curl.log 2>&1
+    cat curl.log >>$LOG
+    echo "Running CURL request 2 ..." >>$LOG
+    curl -X GET http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/getUser/+85262741153 -o curl.log 2>&1
+    cat curl.log >>$LOG
+    echo "" >>$LOG
+}
+
+echo "############################################" >>$LOG
+date >>$LOG
+echo "Job started" >>$LOG
+
+pid=$(getTomcatPid)
+
+if [ -n "$pid" ] ; then
+    echo "Tomcat is already running (pid: $pid)" >>$LOG
+    curlRequest
+else
+    echo "Tomcat is not running" >>$LOG
+    startTomcat
+    curlRequest
+fi
+
+echo "Job completed" >>$LOG
