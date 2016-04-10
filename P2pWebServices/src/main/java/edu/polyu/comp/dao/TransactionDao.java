@@ -24,6 +24,10 @@ public class TransactionDao {
 			isSuccess = false;
 		} finally {
 			session.disconnect();
+			/* End the session by releasing the JDBC connection and cleaning up.  
+			 * It is not strictly necessary to close the session but you must at least
+			 */
+			session.close();
 		}
 		return isSuccess;
 	}

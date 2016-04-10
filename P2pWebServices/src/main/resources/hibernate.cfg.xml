@@ -18,6 +18,11 @@
 		
 		<property name="hibernate.default_schema">comp5527</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+		<!-- 
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.connection.pool_size">1</property>
+		-->
 		
 		<!-- specify index file path -->
         <property name="hibernate.search.default.directory_provider">filesystem</property>
