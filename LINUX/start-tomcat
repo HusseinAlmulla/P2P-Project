@@ -14,7 +14,10 @@ startTomcat() {
     cd $TOMCAT_HOME/webapps
 
     echo "Deleting old log files ..." >> $LOG
-    rm -rf $TOMCAT_HOME/logs/* >>$LOG 2>&1
+    sudo rm -rf $TOMCAT_HOME/logs/* >>$LOG 2>&1
+
+    echo "Deleting hibernate index ..." >> $LOG
+    sudo rm -rf $TOMCAT_HOME/webapps/hibernate_index >>$LOG 2>&1
 
     echo "Starting tomcat ..." >>$LOG
     sudo $TOMCAT_HOME/bin/startup.sh >>$LOG 2>&1
