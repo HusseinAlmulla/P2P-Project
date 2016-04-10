@@ -83,6 +83,9 @@ We encountered an unsolvable issue with hibernate indexing where SQL query will 
 <b>Dummy Web Service Request</b><br>
 http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/hello/user<br>
 
+<b>Issues of hibernate with AWS RDS</b><br>
+https://forums.aws.amazon.com/message.jspa?messageID=580214<br>
+
 <b>References:</b><br>
 https://www.liferay.com/web/brett.swaim/blog/-/blogs/sample-tomcat-startup-scripts<br>
 https://shabirimam.wordpress.com/2009/03/10/adding-script-to-run-at-startup-or-shutdown<br>
