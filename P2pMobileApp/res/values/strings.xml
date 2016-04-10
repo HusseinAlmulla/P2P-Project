@@ -61,11 +61,13 @@
     <string name="gcm_defaultSenderId">578005844236</string> <!-- Jeffrey sender ID -->
     
     <string name="webservice_protocol">http</string>
-    <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string>
+    <string name="webservice_url">ec2-52-10-73-179.us-west-2.compute.amazonaws.com</string> 
     <!-- <string name="webservice_url">192.168.0.103</string> -->
     <string name="webservice_port">8080</string>
     <string name="webservice_test">P2pWebServices/rest/hello</string>
     <string name="webservice_create_user">P2pWebServices/rest/createUser</string>
     <string name="webservice_get_user">P2pWebServices/rest/getUser</string>
     <string name="webservice_send_money">P2pWebServices/rest/sendMoney</string>
+    
+    <bool name="debug_mode">true</bool>
 </resources>

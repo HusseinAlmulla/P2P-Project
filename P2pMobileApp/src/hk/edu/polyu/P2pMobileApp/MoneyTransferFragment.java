@@ -81,71 +81,33 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 	public void onClick(View v) {
 		//Toast.makeText(mainActivity, "You Clicked "+v.getId(), Toast.LENGTH_LONG).show();
 		if (v instanceof Button) {
-			String sender = ((GlobalClass) this.getActivity().getApplication()).getMobilePhone();
+			// FIX previous code merge synchronization issue
+			// this part supports the offline transaction caching feature, 
+			// take great precautions when updating this
 			
-			//check if any field is null or empty
-			String currency = (String)spinnerCurrencyList.getSelectedItem();
-			String amount = editTextMoneyTransferAmount.getText().toString();
-			String recipient = (String)spinnerFriendList.getSelectedItem();
-			String message = editTextMoneyTransferMessage.getText().toString();
-			
-			Log.d(TAG, "curreny: " + currency);
-			Log.d(TAG, "amount: " + amount);
-			Log.d(TAG, "recipient: " + recipient);
-			Log.d(TAG, "message: " + message);
-			
-			if (sender!=null && !sender.equals("") && 
-				currency!=null && !currency.equals("") && 
-				amount!=null && !amount.equals("") && 
-				recipient!=null && !recipient.equals("")
-			) {
-				// parse the phone number from recipient info 
-				String delim = " tel: ";
-				recipient = recipient.substring(recipient.indexOf(delim)+delim.length(), recipient.length());
-				
-				// all mandatory fields are ready, we are good to go
-	        	progress = ProgressDialog.show(this.getActivity(), "Connecting", "Please wait...", true);
-	        	
-	        	//trigger network request
-	        	new ConnectWebServiceTask(this.getActivity().getApplicationContext(), this).execute(
-	        			getString(R.string.webservice_protocol),
-	        			getString(R.string.webservice_url),
-	        			getString(R.string.webservice_port),
-	        			getString(R.string.webservice_send_money), 
-	        			sender, 
-	        			currency, 
-	        			amount, 
-	        			recipient, 
-	        			message);
-			}
-			
-			if (recipient==null) {
-				if (v instanceof Button) {
-					
-					String recipientPhone = (String)spinnerFriendList.getSelectedItem();
-					if (recipientPhone==null) {
-						// no recipient found from P2P address book
-			            // reminder user to create
-			            new AlertDialog.Builder(this.getActivity())
-							.setTitle("Error").setMessage("P2P address book is empty!\nPlease use the contact list feature to add recipients.").setCancelable(true)
-							.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.cancel();
-								}
-							}).create().show();
-					}
-					
-					ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-					NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-					if (networkInfo != null && networkInfo.isConnected()) {
-						// for online only - immediately submit the transaction to server
-						sendMoney();
-					} else {
-						Log.d(TAG, "device currently offline, saving transactions to local cache and delay the transfer until device comes online again");
-						// for offline only - save transactions to local cache 
-						cacheTransaction();
-					}
+			String recipientPhone = (String)spinnerFriendList.getSelectedItem();
+			if (recipientPhone==null) {
+				// no recipient found from P2P address book
+	            // reminder user to create
+	            new AlertDialog.Builder(this.getActivity())
+					.setTitle("Error").setMessage("P2P address book is empty!\nPlease use the contact list feature to add recipients.").setCancelable(true)
+					.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					}).create().show();
+	            
+			} else {
+				ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+				NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+				if (networkInfo != null && networkInfo.isConnected()) {
+					// for online only - immediately submit the transaction to server
+					sendMoney();
+				} else {
+					Log.d(TAG, "device currently offline, saving transactions to local cache and delay the transfer until device comes online again");
+					// for offline only - save transactions to local cache 
+					cacheTransaction();
 				}
 			}
 		}
@@ -197,7 +159,7 @@ public class MoneyTransferFragment extends Fragment implements OnItemSelectedLis
 		String recipientPhone = (String)spinnerFriendList.getSelectedItem();
 		String message = editTextMoneyTransferMessage.getText().toString();
 		
-		Log.d(TAG, "curreny: " + currency);
+		Log.d(TAG, "currency: " + currency);
 		Log.d(TAG, "amount: " + amount);
 		Log.d(TAG, "recipient: " + recipientPhone);
 		Log.d(TAG, "message: " + message);

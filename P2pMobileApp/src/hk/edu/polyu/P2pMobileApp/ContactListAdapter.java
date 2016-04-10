@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +86,11 @@ public class ContactListAdapter extends BaseAdapter implements AsyncTaskCallback
 		holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
 
 		String name = ((String [])mLocalContacts.get(position))[0];
-		holder.tv.setText(name);
+		
+		// support display name AND phone number in contact list selection
+		String phone = ((String [])mLocalContacts.get(position))[1];
+		holder.tv.setText(Html.fromHtml(name + "<br><small>tel: " + phone + "</small>"));
+		
 		holder.img.setImageResource(mDrawableResId);
 		holder.img.setId(mDrawableResId);
 		

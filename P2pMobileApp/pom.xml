@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hk.edu.polyu.moneytransfer</groupId>
 	<artifactId>P2pMobileApp</artifactId>
-	<version>0.1</version>
+	<version>1.2</version>
 	<packaging>apk</packaging>
 	<properties>
 		<source.level>1.5</source.level>
@@ -71,6 +71,13 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.6.1</version>
+		</dependency>
+		
+		<!-- use apache string util to do all string parsing job elegantly -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 	</dependencies>
 	
@@ -144,11 +151,17 @@
 							<includes>
 								<include>target/*.apk</include>
 							</includes>
+							<!-- 
 							<keystore>/Users/jeffrey/.android/debug.keystore</keystore>
 							<storepass>android</storepass>
 							<keypass>androiddebugkey</keypass>
 							<alias>android</alias>
-							<skip>true</skip>
+							-->
+ 							<keystore>/Users/jeffrey/.android/jeffrey.keystore</keystore>
+							<storepass>android</storepass>
+							<keypass>android</keypass>
+							<alias>android</alias>
+							<skip>false</skip>
 							<arguments>
 								<argument>-sigalg</argument>
 								<argument>MD5withRSA</argument>
@@ -172,7 +185,7 @@
 						<path>/Users/jeffrey/Library/Android/sdk</path>
 					</sdk>
 					<sign>
-						<debug>true</debug>
+						<debug>false</debug>
 					</sign>
 					<deleteConflictingFiles>true</deleteConflictingFiles>
 					<!-- tell build process to use filtered manifest -->

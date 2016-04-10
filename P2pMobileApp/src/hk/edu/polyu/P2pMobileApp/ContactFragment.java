@@ -2,6 +2,8 @@ package hk.edu.polyu.P2pMobileApp;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
+
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.database.Cursor;
@@ -64,10 +66,23 @@ public class ContactFragment extends Fragment {
         
     	localContacts = new ArrayList<String []>();
     	
-        Cursor contactsCursor = ContactFragment.this.getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null,null);
+    	// add alphabetical sorting in the list view based on DISPLAY NAME
+        Cursor contactsCursor = ContactFragment.this.getActivity().getContentResolver().query(
+        			ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
+        			null,
+        			null,
+        			null,
+        			ContactsContract.Contacts.DISPLAY_NAME + " COLLATE NOCASE ASC"
+        		);
+        
         while (contactsCursor.moveToNext()) {
           String name = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
           String phoneNumber = contactsCursor.getString(contactsCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+          
+          // make sure to trim the phone number from address book or space may occurred when submit the web service request
+          // use apache string utils to do this elegantly
+          phoneNumber = StringUtils.remove(phoneNumber, " ");
+          
           Log.d(TAG, "name: " + name + ", phone: " + phoneNumber);
           localContacts.add(new String[] {name, phoneNumber});
         }

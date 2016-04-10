@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
+    <!-- Add support for multiple lines in the contact list selection -->
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -11,9 +12,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center"
-        android:layout_toLeftOf="@+id/imageView1"
-        android:text="TextView"
-        android:textSize="25dp" />
+        android:layout_toLeftOf="@+id/imageView1" 
+        android:lines="2" 
+        android:maxLines="4" 
+        android:singleLine="false"
+        android:textSize="18sp" />
     
 	<ImageView
         android:id="@+id/imageView1"
