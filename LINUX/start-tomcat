@@ -1,7 +1,7 @@
 #!/bin/bash
 # chkconfig: 345 85 20
 
-export LOG=$HOME/job.log
+export LOG=/var/log/start-tomcat.log
 export TOMCAT_HOME="/home/ec2-user/apache-tomcat-8.0.33"
 
 getTomcatPid() {
@@ -13,10 +13,10 @@ startTomcat() {
     # so this is where the hibernate_index folder will be created
     cd $TOMCAT_HOME/webapps
 
-    echo "Deleting old log files ..." >> $LOG
+    echo "Deleting old log files ..." >>$LOG
     sudo rm -rf $TOMCAT_HOME/logs/* >>$LOG 2>&1
 
-    echo "Deleting hibernate index ..." >> $LOG
+    echo "Deleting hibernate index ..." >>$LOG
     sudo rm -rf $TOMCAT_HOME/webapps/hibernate_index >>$LOG 2>&1
 
     echo "Starting tomcat ..." >>$LOG
@@ -25,11 +25,11 @@ startTomcat() {
 
 curlRequest() {
     echo "Running CURL request 1 ..." >>$LOG
-    curl -X GET http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/getUser/+85262741153 -o curl.log 2>&1
-    cat curl.log >>$LOG
+    curl -X GET http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/hello/user -o /var/log/curl.log 2>&1
+    cat /var/log/curl.log >>$LOG
     echo "Running CURL request 2 ..." >>$LOG
-    curl -X GET http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/getUser/+85262741153 -o curl.log 2>&1
-    cat curl.log >>$LOG
+    curl -X GET http://ec2-52-10-73-179.us-west-2.compute.amazonaws.com:8080/P2pWebServices/rest/getUser/+85262741153 -o /var/log/curl.log 2>&1
+    cat /var/log/curl.log >>$LOG
     echo "" >>$LOG
 }
 
@@ -45,7 +45,10 @@ if [ -n "$pid" ] ; then
 else
     echo "Tomcat is not running" >>$LOG
     startTomcat
-    curlRequest
 fi
 
+echo "wait for 60 seconds" >>$LOG
+sleep 60
+date >>$LOG
+curlRequest
 echo "Job completed" >>$LOG
