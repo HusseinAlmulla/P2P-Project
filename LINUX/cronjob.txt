@@ -1,1 +1,2 @@
 00 07 * * * sudo /sbin/shutdown -r now
+00 19 * * * sudo /sbin/shutdown -r now
