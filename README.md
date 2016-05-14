@@ -19,7 +19,7 @@ This is initially developed by myself and my group teammate (Yeung Mei Yan Becky
 - Apache Tomcat 8.0.32
 - JDK 1.8.0.73
 - Maven 3.0.5
-- Eclipse IDE Mars.2
+- Eclipse IDE Mars.2 with J2EE Perspective (install new software "Web, XML, Java EE and OSGI Enterprise Development")
 - Jackson JSON library 2.6.1
 <br>
 
